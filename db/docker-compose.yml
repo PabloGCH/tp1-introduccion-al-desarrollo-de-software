@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: no
+    volumes:
+      - ./pgsql:/var/lib/postgresql/data:rw
+    environment:
+      POSTGRES_USER: intro
+      POSTGRES_PASSWORD: intro
+      POSTGRES_DB: pgdb
+    networks:
+      - postgresNetwork
+    ports:
+      - 5432:5432
+networks:
+  postgresNetwork:
+    name: postgresNetwork
