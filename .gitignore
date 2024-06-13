@@ -1,3 +1,4 @@
 ./db/pgsql/
 ./be/venv/
-
+./be/.env
+./be/app/__pycache__/
