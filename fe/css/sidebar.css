@@ -1,0 +1,12 @@
+
+.sidebar .avatar {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+
+.sidebar .nav-item {
+  cursor: pointer;
+  font-size: 1em;
+}
+

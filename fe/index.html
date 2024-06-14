@@ -15,23 +15,47 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/colors.css" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+    <link rel="stylesheet" href="css/texts.css" />
   </head>
-  <body id="body">
-    <div class="bg-dark header pe-4">
-      <nav class="navbar d-flex flex-row justify-content-end">
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link text-white">Posts</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white">Profile</a>
-          </li>
-        </ul>
-        <img id="navbar-avatar" class="avatar" src="img/placeholder-profile-picture.png"/>
-      </nav>
-    </div>
-    <main></main>
+  <body id="body" class"body">
+
+    <main class="d-flex justify-content-center">
+
+      <div class="sidebar col-lg-2 p-2">
+        <div class="surface rounded shadow p-2 d-flex flex-column align-items-center">
+          <img id="navbar-avatar" class="avatar" src="img/placeholder-profile-picture.png"/>
+          <ul class="nav d-flex flex-column align-items-start w-100 pt-4">
+            <li class="nav-item w-100">
+              <a class="nav-link text-white d-block w-100 h-100">Posts</a>
+            </li>
+            <li class="nav-item w-100">
+              <a class="nav-link text-white d-block w-100 h-100">Profile</a>
+            </li>
+            <li class="nav-item w-100">
+              <a class="nav-link text-white d-block w-100 h-100">Salir</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="posts col-lg-10 p-2 ps-0">
+        <div class="surface shadow rounded p-2">
+          <div>
+            <h1>Last posts</h1>
+            <div>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
   </body>
   <footer></footer>
 </html>
