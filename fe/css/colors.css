@@ -50,6 +50,7 @@ body {
 .form-control {
   border-color: var(--border-color) !important;
   background-color: var(--bg-color) !important;
+  color: var(--font-color) !important;
 }
 
 

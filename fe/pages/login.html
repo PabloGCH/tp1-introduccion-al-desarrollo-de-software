@@ -42,16 +42,16 @@
           <h1 class="text-center">Sign in</h1>
         </header>
         <main class="col-12 mt-4 surface rounded border border-color p-2 mb-5 shadow  d-flex flex-column justify-content-center align-items-center login-form-container">
-          <form class="d-flex flex-column  login-form">
+          <form id="login-form" class="d-flex flex-column  login-form">
             <label for="email-username" class="form-label">Email or username</label>
             <input class="form-control" type="text" id="email-username" name="email-username"/>
             <label for="password" class="form-label mt-2 shadow">Password</label>
-            <input class="form-control shadow" type="text" id="email-username" name="email-username"/>
+            <input class="form-control shadow" type="text" id="password" name="password"/>
+            <div class="d-flex flex-column justify-content-center">
+              <button type="submit" id="login-button" class="btn btn-success mt-2 shadow">Sign in</button>
+              <span class="text-center mt-2 border-top border-color pt-1">Don't have an account? <a href="register.html" class="link">Sign up</a></span>
+            </div>
           </form>
-          <div class="d-flex flex-column justify-content-center">
-            <button id="login-button" class="btn btn-success mt-2 shadow">Sign in</button>
-            <span class="text-center mt-2 border-top border-color pt-1">Don't have an account? <a href="register.html" class="link">Sign up</a></span>
-          </div>
         </main>
       </div>
   </div>
