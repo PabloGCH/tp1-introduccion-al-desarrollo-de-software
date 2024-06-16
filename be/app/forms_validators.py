@@ -1,9 +1,9 @@
 from .models import User
-from .exceptions import MissingFieldException, UsernameExistsException, EmailAlreadyUsedException, VerifyFieldException, LoginFailedException
+from .exceptions import MissingFieldException, UsernameExistsException, EmailAlreadyUsedException, VerifyFieldException
 
 required = {
     "login": [
-        'username',
+        'email-username',
         'password'
     ],
     "register": [
