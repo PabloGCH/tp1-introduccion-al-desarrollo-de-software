@@ -7,14 +7,14 @@ class User(db.Model):
     username = db.Column(db.String(40), unique=True, nullable=False)
     name = db.Column(db.String(40), nullable=False)
     surname = db.Column(db.String(40), nullable=False)
-    avatar = db.Column(db.Text, nullable=False)
+    avatar = db.Column(db.Text, nullable=True)
     password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     created = db.Column(db.DateTime, default=db.func.current_timestamp())
     last_login = db.Column(db.DateTime, default=db.func.current_timestamp())
 
     def set_password(self, password):
-        self.password = generate_password_hash(password, method="sha256")
+        self.password = generate_password_hash(password, method="pbkdf2:sha256")
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
