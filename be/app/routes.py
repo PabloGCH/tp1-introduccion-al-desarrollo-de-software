@@ -12,7 +12,7 @@ from . import login_manager
 @app.route('/api/login', methods=['POST'])
 def login():
     try:
-        data = request.form.copy()
+        data = request.json
         validate_login_form(data)
 
         user = User.query.filter_by(username=data['username']).first()
@@ -41,7 +41,7 @@ def load_user(user):
 @app.route('/api/register', methods=['POST'])
 def register():
     try:
-        data = request.form.copy()
+        data = request.json
         validate_register_form(data)
         new_user = User(username=data['username'], name=data['name'], surname=data['surname'], email=data['email'])
         new_user.set_password(data['password'])
