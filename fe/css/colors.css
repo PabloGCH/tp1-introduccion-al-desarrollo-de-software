@@ -1,4 +1,7 @@
 * {
+
+  font-weight: 450;
+
   --bg-color: #222831;
   --bg-color-rgb: 34, 40, 49;
   --surface-color: #31363F;
@@ -22,14 +25,31 @@ body {
 }
 
 .btn {
-  background-color: var(--surface-color);
-  color: var(--font-color);
+  font-weight: 500;
 }
 
-.btn:active{
+.btn-empty {
+  background-color: var(--surface-color);
+  color: var(--font-color);
+  font-weight: 550;
+}
+
+.btn-empty:active{
+  background-color: var(--bg-color) !important;
+  color: var(--font-color) !important;
+}
+
+.link {
+  color: var(--accent-color) !important;
+}
+
+.link:visited {
+  color: var(--accent-color) !important;
+}
+
+.form-control {
+  border-color: var(--border-color) !important;
   background-color: var(--bg-color) !important;
 }
 
-main {
-  height: 100vh;
-}
+
