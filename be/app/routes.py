@@ -14,9 +14,8 @@ def login():
     try:
         data = request.form.copy()
         validate_login_form(data)
-        username = data['username']
 
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=data['username']).first()
 
         if not user or user.check_password(data['password']) is False:
             raise LoginFailedException()
@@ -44,7 +43,6 @@ def register():
     try:
         data = request.form.copy()
         validate_register_form(data)
-
         new_user = User(username=data['username'], name=data['name'], surname=data['surname'], email=data['email'])
         new_user.set_password(data['password'])
         db.session.add(new_user)
@@ -60,8 +58,8 @@ def register():
 def getProfile():
     return ''
 
-
 @app.route('/api/posts', methods=['GET'])
+@login_required
 def getPost():
     return ''
 
