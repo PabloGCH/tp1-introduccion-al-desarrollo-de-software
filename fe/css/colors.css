@@ -52,5 +52,10 @@ body {
   background-color: var(--bg-color) !important;
   color: var(--font-color) !important;
 }
+.input-group-text {
+  border-color: var(--border-color) !important;
+  background-color: var(--surface-color) !important;
+  color: var(--font-color) !important;
+}
 
 
