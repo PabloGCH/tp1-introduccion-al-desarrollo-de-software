@@ -19,3 +19,8 @@ class EmailAlreadyUsedException(Exception):
     def __init__(self, email):
         self.message = f'El correo electrónico {email} ya está en uso'
         super().__init__(self.message)
+
+class LoginFailedException(Exception):
+    def __init__(self):
+        self.message = 'Usuario o contraseña incorrectos'
+        super().__init__(self.message)
