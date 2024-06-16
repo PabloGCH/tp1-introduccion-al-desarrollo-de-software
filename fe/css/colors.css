@@ -29,3 +29,7 @@ body {
 .btn:active{
   background-color: var(--bg-color) !important;
 }
+
+main {
+  height: 100vh;
+}

@@ -7,5 +7,7 @@
     border-right: 0px !important;
     border-left: 0px !important;
     border-radius: 0px !important;
+    border: none !important;
+    background-color: var(--bg-color) !important;
   }
 }

@@ -23,21 +23,23 @@
     <link defer rel="stylesheet" href="css/main-content.css" />
     <link defer rel="stylesheet" href="css/texts.css" />
     <link defer rel="stylesheet" href="css/colors.css" />
+    <link defer rel="stylesheet" href="css/layout.css" />
   </head>
   <body id="body" class"body">
 
-    <main class="d-flex flex-column flex-md-row justify-content-center">
+    <header class="header surface d-block d-md-none col-12 border-bottom border-color mb-2">
+      <div class="d-flex flex-row justify-content-between pe-2 ps-2 align-items-center h-100">
+          <button class="btn border border-color surface">
+            <i class="fa fa-bars"></i>
+          </button>
+          <img id="header-avatar" class="avatar" src="img/placeholder-profile-picture.png"/>
+      </div>
+    </header>
 
-      <header class="header surface d-block d-md-none col-12 border-bottom border-color mb-5">
-        <div class="h-100 d-flex flex-row justify-content-between pe-2 ps-2 align-items-center">
-            <button class="btn border border-color surface">
-              <i class="fa fa-bars"></i>
-            </button>
-            <img id="header-avatar" class="avatar" src="img/placeholder-profile-picture.png"/>
-        </div>
-      </header>
+    <main class="d-flex flex-column flex-md-row justify-content-md-center">
 
-      <div class="sidebar col-md-3 col-lg-2 p-2 d-none d-md-block" style="">
+
+      <div class="sidebar col-md-3 col-lg-2 p-2 d-none d-md-block collapse h-100">
         <div class="surface rounded shadow p-1 d-flex flex-column align-items-center border border-color">
           <img id="sidebar-avatar" class="avatar" src="img/placeholder-profile-picture.png"/>
           <ul class="nav d-flex flex-column align-items-start w-100 pt-4">
@@ -54,16 +56,19 @@
         </div>
       </div>
 
-      <div class="posts col-lg-10 p-0 p-md-2 ps-md-0 main-section">
-        <div class="surface shadow rounded p-2 border border-color main-section-content">
+      <div class="posts col-lg-10 p-0 p-md-2 ps-md-0 h-100 main-section">
+        <div class="surface rounded p-2 border border-color main-section-content h-100">
           <div>
             <h1>Last posts</h1>
-            <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+            <div class="post surface shadow rounded border border-color p-2 mt-4">
+              <h2>Post title</h2>
+              <div>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
+              </div>
             </div>
           </div>
         </div>

@@ -1,0 +1,9 @@
+main {
+  height: 100vh;
+}
+
+@media screen and (max-width: 768px) {
+  main {
+    height: auto !important;
+  }
+}
