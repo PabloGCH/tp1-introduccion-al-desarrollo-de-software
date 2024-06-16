@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <title>intro</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Bootstrap -->
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Notyf -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+    <!-- Scripts -->
+    <script defer src="../js/toast.js"></script>
+    <script defer src="../js/login.js"></script>
+
+
+    <link defer rel="stylesheet" href="../css/texts.css" />
+    <link defer rel="stylesheet" href="../css/colors.css" />
+    <link defer rel="stylesheet" href="../css/login.css" />
+  </head>
+  <body id="body" class="body d-flex flex-column justify-content-center align-items-center">
+      <div class="w-100 d-flex flex-column justify-content-center align-items-center">
+        <header >
+          <h1 class="text-center">Sign in</h1>
+        </header>
+        <main class="col-12 mt-4 surface rounded border border-color p-2 mb-5 shadow  d-flex flex-column justify-content-center align-items-center login-form-container">
+          <form class="d-flex flex-column  login-form">
+            <label for="email-username" class="form-label">Email or username</label>
+            <input class="form-control" type="text" id="email-username" name="email-username"/>
+            <label for="password" class="form-label mt-2 shadow">Password</label>
+            <input class="form-control shadow" type="text" id="email-username" name="email-username"/>
+          </form>
+          <div class="d-flex flex-column justify-content-center">
+            <button id="login-button" class="btn btn-success mt-2 shadow">Sign in</button>
+            <span class="text-center mt-2 border-top border-color pt-1">Don't have an account? <a href="register.html" class="link">Sign up</a></span>
+          </div>
+        </main>
+      </div>
+  </div>
+  <footer></footer>
+</html>

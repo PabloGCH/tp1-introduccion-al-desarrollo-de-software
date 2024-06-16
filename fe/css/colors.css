@@ -1,19 +1,55 @@
 * {
-  --body-color: #222831;
+
+  font-weight: 450;
+
+  --bg-color: #222831;
+  --bg-color-rgb: 34, 40, 49;
   --surface-color: #31363F;
+  --surface-color-rgb: 49, 54, 63;
   --accent-color: #76ABAE;
+  --border-color: #576072;
   --font-color: #EEEEEE;
 }
 
 body {
-  background-color: var(--body-color);
+  background-color: var(--bg-color);
   color: var(--font-color);
 }
 
-.border {
-  border: 1px solid var(--accent-color);
+.border-color {
+  border-color: var(--border-color) !important;
 }
 
 .surface {
   background-color: var(--surface-color);
 }
+
+.btn {
+  font-weight: 500;
+}
+
+.btn-empty {
+  background-color: var(--surface-color);
+  color: var(--font-color);
+  font-weight: 550;
+}
+
+.btn-empty:active{
+  background-color: var(--bg-color) !important;
+  color: var(--font-color) !important;
+}
+
+.link {
+  color: var(--accent-color) !important;
+}
+
+.link:visited {
+  color: var(--accent-color) !important;
+}
+
+.form-control {
+  border-color: var(--border-color) !important;
+  background-color: var(--bg-color) !important;
+}
+
+
