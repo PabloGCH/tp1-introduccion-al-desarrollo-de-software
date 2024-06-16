@@ -5,26 +5,6 @@ from .models import User
 from . import db
 from . import login_manager
 
-@app.route('/')
-def home():
-    return 'Home'
-
-
-@app.route('/login')
-def loginView():
-    return 'Login'
-
-
-@app.route('/register')
-def registerView():
-    return 'Register'
-
-
-@app.route('/profile')
-def profileView():
-    return 'Profile'
-
-
 # API
 # ================
 
