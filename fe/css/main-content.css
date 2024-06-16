@@ -1,0 +1,11 @@
+.main-section {
+  max-width: 1200px !important;
+}
+
+@media screen and (max-width: 768px) {
+  .border.main-section-content {
+    border-right: 0px !important;
+    border-left: 0px !important;
+    border-radius: 0px !important;
+  }
+}

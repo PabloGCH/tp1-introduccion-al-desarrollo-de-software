@@ -1,8 +1,12 @@
+.sidebar {
+  max-width: 250px !important;
+}
 
 .sidebar .avatar {
   height: 100px;
   width: 100px;
   border-radius: 50%;
+  border: 1px solid var(--border-color);
 }
 
 .sidebar .nav-item {
@@ -10,3 +14,6 @@
   font-size: 1em;
 }
 
+.sidebar .nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
