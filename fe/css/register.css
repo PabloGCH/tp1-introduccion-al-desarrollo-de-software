@@ -1,0 +1,30 @@
+
+body {
+  width: 100vw;
+  min-height: 100vh;
+}
+
+label, .input-group {
+  max-width: 350px;
+}
+
+.btn {
+  min-width: 290px;
+}
+
+
+@media screen and (max-width: 576px) {
+  .register-form-container {
+    border-right: none !important;
+    border-left: none !important;
+    border-radius: 0px !important;
+  }
+}
+@media screen and (min-width: 576px) {
+  .register-form-container {
+    width: 600px !important;
+  }
+}
+
+
+

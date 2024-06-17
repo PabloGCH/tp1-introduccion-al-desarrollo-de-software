@@ -29,27 +29,88 @@
 
     <!-- Scripts -->
     <script defer src="../js/toast.js"></script>
-    <script defer src="../js/login.js"></script>
+    <script defer src="../js/show-password.js"></script>
+    <script defer src="../js/register.js"></script>
 
 
     <link defer rel="stylesheet" href="../css/texts.css" />
     <link defer rel="stylesheet" href="../css/colors.css" />
-    <link defer rel="stylesheet" href="../css/login.css" />
+    <link defer rel="stylesheet" href="../css/register.css" />
+    <link defer rel="stylesheet" href="../css/inputs.css" />
   </head>
   <body id="body" class="body d-flex flex-column justify-content-center align-items-center">
       <div class="w-100 d-flex flex-column justify-content-center align-items-center">
         <header >
-          <h1 class="text-center">Sign in</h1>
+          <h1 class="text-center">Register</h1>
         </header>
-        <main class="col-12 mt-4 surface rounded border border-color p-2 mb-5 shadow  d-flex flex-column justify-content-center align-items-center login-form-container">
-          <form id="login-form" class="d-flex flex-column  login-form">
-            <label for="email-username" class="form-label">Email or username</label>
-            <input class="form-control" type="text" id="email-username" name="email-username"/>
-            <label for="password" class="form-label mt-2 shadow">Password</label>
-            <input class="form-control shadow" type="text" id="password" name="password"/>
-            <div class="d-flex flex-column justify-content-center">
-              <button type="submit" id="login-button" class="btn btn-success mt-2 shadow">Sign in</button>
-              <span class="text-center mt-2 border-top border-color pt-1">Don't have an account? <a href="register" class="link">Sign up</a></span>
+        <main class="col-12 mt-2 surface rounded border border-color p-2 mb-2 shadow  d-flex flex-column justify-content-center align-items-center register-form-container">
+          <form id="register-form" class="d-flex flex-column  register-form w-100">
+            <div class="row gx-2">
+              <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                <label for="email" class="form-label d-block w-100">Email</label>
+                <div class="input-group shadow">
+                  <input class="form-control" type="text" id="email" name="email"/>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                <label for="email-verify" class="form-label d-block w-100">Verify Email</label>
+                <div class="input-group shadow">
+                  <input class="form-control" type="text" id="email-verify" name="email-verify"/>
+                </div>
+              </div>
+              <!--
+              </div>
+            </div>
+              -->
+            </div>
+            <div class="row gx-2">
+              <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                <label for="password" class="form-label mt-1 d-block w-100">Password</label>
+                <div class="input-group">
+                  <input class="form-control" type="password" id="password" name="password"/>
+                  <button type="button" onclick="showPassword(event)" class="input-group-text" id="password-toggle">
+                    <i class="fa fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                <label for="password-verify" class="form-label mt-1 d-block w-100">Verify password</label>
+                <div class="input-group">
+                  <input class="form-control" type="password" id="password-verify" name="password-verify"/>
+                  <button type="button" onclick="showPasswordVerify(event)" class="input-group-text" id="password-verify-toggle">
+                    <i class="fa fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="row gx-2">
+              <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                <label for="name" class="form-label mt-1 d-block w-100">Name</label>
+                <div class="input-group shadow">
+                  <input class="form-control" type="text" id="name" name="name"/>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                <label for="surname" class="form-label mt-1 d-block w-100">Surname</label>
+                <div class="input-group shadow">
+                  <input class="form-control" type="text" id="surname" name="surname"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="row gx-2">
+              <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                <label for="username" class="form-label mt-1 d-block w-100">Username</label>
+                <div class="input-group shadow">
+                  <input class="form-control" type="text" id="username" name="username"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-column justify-content-center col-12 align-items-center">
+              <button type="submit" id="register-button" class="btn btn-success mt-2 shadow">Register</button>
+              <span class="text-center mt-1 border-top border-color pt-1 col-11">Already have an account? <a href="login" class="link">Sign in</a></span>
             </div>
           </form>
         </main>

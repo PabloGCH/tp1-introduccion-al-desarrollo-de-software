@@ -5,7 +5,7 @@ body {
 }
 
 .form-control {
-  max-width: 280px;
+  width: 100%;
 }
 
 .btn {
@@ -25,5 +25,6 @@ body {
     width: 300px !important;
   }
 }
+
 
 
