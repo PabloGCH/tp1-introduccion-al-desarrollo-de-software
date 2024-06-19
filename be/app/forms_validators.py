@@ -34,24 +34,24 @@ def validate_register_form(data):
     user_exists = User.query.filter_by(username=username).first()
 
     if user_exists:
-        raise UsernameExistsException(username)
+        raise UsernameExistsException('username')
 
     email = data['email']
     user_exists = User.query.filter_by(email=email).first()
 
     if user_exists:
-        raise EmailAlreadyUsedException(email)
+        raise EmailAlreadyUsedException('email')
 
     if data['email'] != data['emailVerify']:
-        raise VerifyFieldException('Correo electrónico')
+        raise VerifyFieldException('email')
 
     if data['password'] != data['passwordVerify']:
-        raise VerifyFieldException('Contraseña')
+        raise VerifyFieldException('password')
 
 def get_missing_fields(data, form):
     missing_fields = []
     for item in required[form]:
-        if item not in data:
+        if item not in data or not data[item]:
             missing_fields.append(item)
 
     return missing_fields

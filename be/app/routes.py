@@ -24,7 +24,7 @@ def login():
         return jsonify({'user': {'username': user.username, 'name': user.name, 'surname': user.surname, 'avatar': user.avatar}}), 200
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), 400
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
@@ -51,7 +51,7 @@ def register():
         return jsonify({'message': 'User created successfully'}), 201
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), 400
 
 
 @app.route('/api/profile/<userId>', methods=['GET'])
