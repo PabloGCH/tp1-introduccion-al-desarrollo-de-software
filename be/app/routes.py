@@ -62,10 +62,19 @@ def register():
 def getProfile():
     return ''
 
+
 @app.route('/api/posts', methods=['GET'])
 @login_required
 def getPost():
-    return ''
+    try:
+        posts = Post.query.filter_by(owner=current_user.id).order_by(Post.created.desc()).all()
+        return jsonify([{
+            'title': post.title,
+            'content': post.content,
+            'image': post.image
+            } for post in posts]), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 
 @app.route('/api/post', methods=['POST'])
@@ -87,7 +96,10 @@ def createPost():
 
 @app.route('/api/post', methods=['DELETE'])
 def deletePost():
-    return ''
+    try:
+        return ''
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 
 @app.route('/api/post', methods=['PUT'])
