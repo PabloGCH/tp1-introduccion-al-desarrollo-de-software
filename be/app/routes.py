@@ -1,5 +1,8 @@
 from flask import current_app as app, request, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
+import base64
+import uuid
+
 from .exceptions import LoginFailedException
 from .models import (User, Post)
 from .forms_validators import (
@@ -69,15 +72,18 @@ def getPost():
     try:
         posts = Post.query.filter_by(owner=current_user.id).order_by(Post.created.desc()).all()
         return jsonify([{
+            'id': post.id,
             'title': post.title,
             'content': post.content,
-            'image': post.image
+            'image': post.image,
+            'created': post.created
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
 
 @app.route('/api/post', methods=['POST'])
+@login_required
 def createPost():
     try:
         data = request.json
@@ -85,8 +91,14 @@ def createPost():
         new_post = Post(
                 title=data['title'],
                 content=data['content'],
-                owner=current_user.id
+                owner=current_user.id,
                 )
+        if 'image' in data:
+            file = base64.b64decode(data['image'])
+            filename = f"{uuid.uuid4()}.png"
+            with open(f"uploads/{filename}", 'wb') as f:
+                f.write(file)
+            new_post.image = filename
         db.session.add(new_post)
         db.session.commit()
         return ({'message': 'Post created successfully'}), 201
@@ -95,18 +107,39 @@ def createPost():
 
 
 @app.route('/api/post', methods=['DELETE'])
+@login_required
 def deletePost():
     try:
-        return ''
+        data = request.json
+        post = Post.query.filter_by(id=data['id']).first()
+        if not post:
+            return jsonify({'error': 'Post not found'}), 404
+        db.session.delete(post)
+        db.session.commit()
+        return jsonify({'message': 'Post deleted successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
 
 @app.route('/api/post', methods=['PUT'])
+@login_required
 def updatePost():
-    return ''
+    try:
+        data = request.json
+        validate_post_form(data)
+        post = Post.query.filter_by(id=data['id']).first()
+        if not post:
+            return jsonify({'error': 'Post not found'}), 404
+        post.title = data['title']
+        post.content = data['content']
+        db.session.commit()
+        return jsonify({'message': 'Post updated successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 
 @app.route('/api/post/comment', methods=['POST'])
+@login_required
 def createComment():
     return ''
+
