@@ -55,3 +55,7 @@ def get_missing_fields(data, form):
             missing_fields.append(item)
 
     return missing_fields
+
+
+def validate_post_form(data):
+    return []

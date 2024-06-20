@@ -1,8 +1,12 @@
 from flask import current_app as app, request, jsonify
 from flask_login import login_user, login_required, logout_user, current_user
 from .exceptions import LoginFailedException
-from .models import User
-from .forms_validators import validate_login_form, validate_register_form
+from .models import (User, Post)
+from .forms_validators import (
+        validate_login_form,
+        validate_register_form,
+        validate_post_form
+        )
 from . import db
 from . import login_manager
 
@@ -66,7 +70,19 @@ def getPost():
 
 @app.route('/api/post', methods=['POST'])
 def createPost():
-    return ''
+    try:
+        data = request.json
+        validate_post_form(data)
+        new_post = Post(
+                title=data['title'],
+                content=data['content'],
+                owner=current_user.id
+                )
+        db.session.add(new_post)
+        db.session.commit()
+        return ({'message': 'Post created successfully'}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 
 @app.route('/api/post', methods=['DELETE'])
