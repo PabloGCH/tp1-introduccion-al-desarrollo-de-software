@@ -25,6 +25,8 @@
     <link defer rel="stylesheet" href="css/colors.css" />
     <link defer rel="stylesheet" href="css/layout.css" />
     <link defer rel="stylesheet" href="css/post.css" />
+    <script defer src="../js/config.js"></script>
+    <script defer src="../js/logout.js"></script>
   </head>
   <body id="body" class"body">
 
@@ -39,7 +41,6 @@
 
     <main class="d-flex flex-column flex-md-row justify-content-md-center">
 
-
       <div class="sidebar col-md-3 col-lg-2 p-2 d-md-block collapse" id="sidebar">
         <div class="surface rounded shadow p-1 d-flex flex-column align-items-center border border-color">
           <img id="sidebar-avatar" class="avatar" src="img/placeholder-profile-picture.png"/>
@@ -51,7 +52,7 @@
               <a class="nav-link text-white d-block w-100 h-100">Profile</a>
             </li>
             <li class="nav-item w-100">
-              <a class="nav-link text-white d-block w-100 h-100">Salir</a>
+              <a id="logout-button" class="nav-link text-white d-block w-100 h-100">Salir</a>
             </li>
           </ul>
         </div>

@@ -26,13 +26,13 @@ def login():
         user = User.query.filter((User.username == data['email-username']) | (User.email == data['email-username'])).first()
 
         if not user or user.check_password(data['password']) is False:
-            raise LoginFailedException()
+            raise LoginFailedException(['email-username', 'password'])
 
         login_user(user)
         return jsonify({'user': {'username': user.username, 'name': user.name, 'surname': user.surname, 'avatar': user.avatar}}), 200
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), 400
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
@@ -59,7 +59,7 @@ def register():
         return jsonify({'message': 'User created successfully'}), 201
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), 400
 
 
 @app.route('/api/profile/<userId>', methods=['GET'])

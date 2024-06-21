@@ -1,23 +1,61 @@
-
 const registerForm = document.getElementById('register-form');
 
 const register = (e) => {
-  e.preventDefault(); //Evita que se recargue la página al enviar el formulario
+    e.preventDefault();
 
-  let email = e.target['email'].value;
-  let emailVerify = e.target['email-verify'].value;
-  let password = e.target['password'].value;
-  let passwordVerify = e.target['password-verify'].value;
-  let name = e.target['name'].value;
-  let surname = e.target['surname'].value;
-  let username = e.target['username'].value;
+    let data = {
+        email: e.target['email'].value,
+        emailVerify: e.target['email-verify'].value,
+        password: e.target['password'].value,
+        passwordVerify: e.target['password-verify'].value,
+        name: e.target['name'].value,
+        surname: e.target['surname'].value,
+        username: e.target['username'].value,
+    };
 
-  // TODO
+    let requestConfig = {
+        method: config.endpoints.register.method,
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+    };
 
-  errorToast('User already exists');
-}
+    fetch(config.backend + config.endpoints.register.url, requestConfig)
+        .then(responseHandler)
+        .catch(unknownErrorHandler);
+};
 
 registerForm.addEventListener('submit', register);
 
+const responseHandler = (response) => {
+    if (response.ok) {
+        response.json().then(registerHandler);
+    } else {
+        response.json().then(registerErrorHandler);
+    }
+}
 
+const registerHandler = (data) => {
+    sessionStorage.setItem(window.sessionStorageKeys['userCreated'], 1);
+    window.location.href = '/pages/login';
+};
 
+const registerErrorHandler = (error) => {
+    if(error.message){
+        errorToast(window.backendErrors[error.message]);
+    }
+    if(error.field){
+        error.field.forEach(field => {
+            let input = document.getElementById(field);
+            input.classList.add('is-invalid');
+            let inputValidate = document.getElementById(field+"-verify");
+            if(inputValidate){
+                inputValidate.classList.add('is-invalid');
+            }
+        });
+    }
+};
+
+const unknownErrorHandler = (error) => {
+    errorToast('Error desconocido');
+}
