@@ -25,8 +25,9 @@
     <link defer rel="stylesheet" href="css/colors.css" />
     <link defer rel="stylesheet" href="css/layout.css" />
     <link defer rel="stylesheet" href="css/post.css" />
-    <script defer src="../js/config.js"></script>
+    <script src="../js/config.js"></script>
     <script defer src="../js/logout.js"></script>
+    <script defer src="../js/post.js"></script>
   </head>
   <body id="body" class"body">
 
@@ -58,21 +59,11 @@
         </div>
       </div>
 
-      <div class="posts col-lg-10 p-0 p-md-2 ps-md-0 h-100 main-section">
-        <div class="surface rounded p-2 border border-color main-section-content h-100">
-          <div>
-            <h1>Last posts</h1>
-            <div class="post surface shadow rounded border border-color p-2 mt-4">
-              <h2>Post title</h2>
-              <div>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec
-              </div>
-            </div>
-          </div>
+      <div class="main-section col-lg-10 p-0 p-md-2 ps-md-0 h-100">
+        <div class="main-section-title surface rounded border border-color p-2 mb-2">
+          <h1>Last posts</h1>
+        </div>
+        <div id="main-section-content" class="main-section-content surface rounded p-2 border border-color minh-100">
         </div>
       </div>
     </main>
