@@ -24,6 +24,7 @@ class EmailAlreadyUsedException(Exception):
         super().__init__(self.message)
 
 class LoginFailedException(Exception):
-    def __init__(self):
-        self.message = 'Usuario o contraseña incorrectos'
+    def __init__(self, fields):
+        self.message = 'LoginFailedException'
+        self.field = fields
         super().__init__(self.message)

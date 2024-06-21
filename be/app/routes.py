@@ -26,7 +26,7 @@ def login():
         user = User.query.filter((User.username == data['email-username']) | (User.email == data['email-username'])).first()
 
         if not user or user.check_password(data['password']) is False:
-            raise LoginFailedException()
+            raise LoginFailedException(['email-username', 'password'])
 
         login_user(user)
         return jsonify({'user': {'username': user.username, 'name': user.name, 'surname': user.surname, 'avatar': user.avatar}}), 200
