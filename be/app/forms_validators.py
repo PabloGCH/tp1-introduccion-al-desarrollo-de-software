@@ -14,6 +14,10 @@ required = {
         'emailVerify',
         'password',
         'passwordVerify'
+    ],
+    "post": [
+        'title',
+        'content'
     ]
 }
 
@@ -55,3 +59,13 @@ def get_missing_fields(data, form):
             missing_fields.append(item)
 
     return missing_fields
+
+
+def validate_post_form(data):
+    missing_fields = get_missing_fields(data, 'post')
+    if missing_fields:
+        raise MissingFieldException(missing_fields)
+
+
+
+
