@@ -1,4 +1,4 @@
-from flask import current_app as app, request, jsonify
+from flask import current_app as app, request, jsonify, make_response
 from flask_login import login_user, login_required, logout_user, current_user
 import base64
 import uuid
@@ -78,7 +78,7 @@ def getPost():
             'content': post.content,
             'created': post.created,
             'owner': post.owner,
-            'ownerName': User.query.filter_by(id=post.owner).first().username
+            'ownerName': User.query.filter_by(id=post.owner).first().username,
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -183,6 +183,7 @@ def createComment():
     return ''
 
 
+# Retorna la imagen como archivo binario para poder ser utilizada en un tag img
 @app.route('/api/img/post/<postId>', methods=['GET'])
 def getPostImage(postId):
     try:
@@ -193,10 +194,8 @@ def getPostImage(postId):
             return jsonify({'error': 'Post has no image'}), 404
         with open(f"uploads/{post.image}", 'rb') as f:
             image = f.read()
-        return image, 200
+        response = make_response(image)
+        response.headers.set('Content-Type', 'image/png')
+        return response, 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
-
-
-
-
