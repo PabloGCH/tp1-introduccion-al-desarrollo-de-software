@@ -1,5 +1,13 @@
 .post {
   cursor: pointer;
+  color: #EEEEEE;
+  display: block;
+  text-decoration: none;
+}
+
+.owner-link {
+  color: #EEEEEE;
+  opacity: 0.6;
 }
 
 .post-img {

@@ -1,15 +1,31 @@
 
 
 let convertPostToHTMLObjects = (data) => {
-    let postCard = document.createElement('div');
+    let postCard = document.createElement('a');
     postCard.classList.add('post', 'surface', 'shadow', 'rounded', 'border', 'border-color', 'p-2', 'mb-2')
+    postCard.href = '/pages/post/' + data.id;
 
     //SECCION DE TITULO
     let postCardTitleBox = document.createElement('div');
-    postCardTitleBox.classList.add('post-title-box', 'd-flex', 'justify-content-between', 'mb-2', 'border-bottom', 'border-color');
+    postCardTitleBox.classList.add('post-title-box', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2', 'border-bottom', 'border-color');
     let title = document.createElement('h2');
     title.innerText = data.title;
+    let creationInformation = document.createElement('div');
+    creationInformation.classList.add('d-flex', 'flex-column');
+    let owner = document.createElement('a');
+    owner.classList.add('owner-link');
+    owner.href = '/pages/profile/' + data.owner;
+    owner.innerText = '@' + data.ownerName;
+    creationInformation.appendChild(owner);
+
+    let creationDate = document.createElement('span');
+    creationDate.innerText = 'Created at: ' + new Date(data.created).toLocaleString();
+    creationDate.classList.add('small');
+    creationInformation.appendChild(creationDate);
+    
+
     postCardTitleBox.appendChild(title);
+    postCardTitleBox.appendChild(creationInformation);
     
     //SECCION DE CONTENIDO
     let postCardContent = document.createElement('div');
@@ -18,7 +34,8 @@ let convertPostToHTMLObjects = (data) => {
     img.src = config.backend + config.endpoints.getPostImage.url + '/' + data.id;
     img.classList.add('rounded', 'border', 'border-color', 'post-img', 'me-md-2');
     img.addEventListener('error', imgLoadError);
-    let content = document.createElement('div');
+    let content = document.createElement('p');
+    content.classList.add('pt-2');
     content.innerText = data.content;
     postCardContent.appendChild(img);
     postCardContent.appendChild(content);
