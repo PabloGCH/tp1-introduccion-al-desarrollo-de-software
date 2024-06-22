@@ -71,12 +71,29 @@ def getProfile():
 @login_required
 def getPost():
     try:
-        posts = Post.query.filter_by(owner=current_user.id).order_by(Post.created.desc()).all()
+        posts = Post.query.order_by(Post.created.desc()).all()
         return jsonify([{
             'id': post.id,
             'title': post.title,
             'content': post.content,
-            'created': post.created
+            'created': post.created,
+            'owner': post.owner
+            } for post in posts]), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+
+@app.route('/api/posts/user/<userId>', methods=['GET'])
+@login_required
+def getUserPosts(userId):
+    try:
+        posts = Post.query.filter_by(owner=userId).order_by(Post.created.desc()).all()
+        return jsonify([{
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'created': post.created,
+            'owner': post.owner
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
