@@ -2,6 +2,11 @@
   max-width: 250px !important;
 }
 
+.sidebar i {
+  position: relative;
+  top: 1px;
+}
+
 
 .sidebar .avatar {
   height: 100px;
