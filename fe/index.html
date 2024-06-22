@@ -34,6 +34,7 @@
     <link defer rel="stylesheet" href="css/layout.css" />
     <link defer rel="stylesheet" href="css/post.css" />
     <script src="../js/config.js"></script>
+    <script defer src="../js/sidebar-links.js"></script>
     <script defer src="../js/toast.js"></script>
     <script defer src="../js/logout.js"></script>
     <script defer src="../js/img-error-handler.js"></script>
@@ -41,7 +42,7 @@
   </head>
   <body id="body" class"body">
 
-    <header class="header surface d-block d-md-none col-12 border-bottom border-color mb-2">
+    <header class="header surface d-block d-md-none col-12 border-bottom border-color">
       <div class="d-flex flex-row justify-content-between pe-2 ps-2 align-items-center h-100">
           <button class="btn btn-empty border border-color surface" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
             <i class="fa fa-bars"></i>
@@ -55,25 +56,16 @@
       <div class="sidebar col-md-3 col-lg-2 p-2 d-md-block collapse" id="sidebar">
         <div class="surface rounded shadow p-1 d-flex flex-column align-items-center border border-color">
           <img id="sidebar-avatar" class="avatar" src="img/placeholder-profile-picture.png"/>
-          <ul class="nav d-flex flex-column align-items-start w-100 pt-md-4">
-            <li class="nav-item w-100 border-bottom border-color">
-              <a class="nav-link text-white d-block w-100 h-100">Posts</a>
-            </li>
-            <li class="nav-item w-100 border-bottom border-color">
-              <a class="nav-link text-white d-block w-100 h-100">Profile</a>
-            </li>
-            <li class="nav-item w-100">
-              <a id="logout-button" class="nav-link text-white d-block w-100 h-100">Salir</a>
-            </li>
+          <ul id="sidebar-links" class="nav d-flex flex-column align-items-start w-100 pt-md-4">
           </ul>
         </div>
       </div>
 
-      <div class="main-section col-md-9 col-lg-10 p-0 p-md-2 ps-md-0 h-100">
-        <div class="main-section-title surface rounded border border-color p-2 mb-2">
+      <div class="main-section col-md-9 col-lg-10 p-0 p-2 ps-md-0 h-100">
+        <div class="main-section-title surface rounded border border-color p-1 mb-2">
           <h1>Last posts</h1>
         </div>
-        <div id="main-section-content" class="main-section-content surface rounded p-2 border border-color minh-100">
+        <div id="main-section-content" class="main-section-content">
         </div>
       </div>
     </main>
