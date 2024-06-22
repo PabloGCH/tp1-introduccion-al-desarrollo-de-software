@@ -77,7 +77,8 @@ def getPost():
             'title': post.title,
             'content': post.content,
             'created': post.created,
-            'owner': post.owner
+            'owner': post.owner,
+            'ownerName': User.query.filter_by(id=post.owner).first().username
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -93,7 +94,8 @@ def getUserPosts(userId):
             'title': post.title,
             'content': post.content,
             'created': post.created,
-            'owner': post.owner
+            'owner': post.owner,
+            'ownerName': User.query.filter_by(id=post.owner).first().username
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -190,7 +192,11 @@ def getPostImage(postId):
         if not post.image:
             return jsonify({'error': 'Post has no image'}), 404
         with open(f"uploads/{post.image}", 'rb') as f:
-            image = base64.b64encode(f.read())
-        return jsonify({'image': image.decode()}), 200
+            image = f.read()
+        return image, 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+
+
+
