@@ -6,8 +6,7 @@
 }
 
 .owner-link {
-  color: #EEEEEE;
-  opacity: 0.6;
+  color: rgba(var(--font-color-rgb), 0.6);
 }
 
 .post-img {

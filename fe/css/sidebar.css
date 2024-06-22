@@ -38,7 +38,7 @@
 @media screen and (min-width: 768px) {
   .sidebar {
     position: sticky;
-    top: 0;
+    top: var(--header-height);
     height: 500px;
   }
 }
