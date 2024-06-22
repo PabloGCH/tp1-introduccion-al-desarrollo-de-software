@@ -2,6 +2,7 @@
   max-width: 250px !important;
 }
 
+
 .sidebar .avatar {
   height: 100px;
   width: 100px;
@@ -26,5 +27,13 @@
   }
   .sidebar .avatar {
     display: none;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 500px;
   }
 }

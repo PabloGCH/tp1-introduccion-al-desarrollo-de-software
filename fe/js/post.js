@@ -1,12 +1,31 @@
+
+
 let convertPostToHTMLObjects = (data) => {
     let postCard = document.createElement('div');
     postCard.classList.add('post', 'surface', 'shadow', 'rounded', 'border', 'border-color', 'p-2', 'mb-2')
+
+    //SECCION DE TITULO
+    let postCardTitleBox = document.createElement('div');
+    postCardTitleBox.classList.add('post-title-box', 'd-flex', 'justify-content-between', 'mb-2', 'border-bottom', 'border-color');
     let title = document.createElement('h2');
     title.innerText = data.title;
+    postCardTitleBox.appendChild(title);
+    
+    //SECCION DE CONTENIDO
+    let postCardContent = document.createElement('div');
+    postCardContent.classList.add('post-content', 'd-flex', 'flex-column', 'flex-md-row');
+    let img= document.createElement('img');
+    img.src = config.backend + config.endpoints.getPostImage.url + '/' + data.id;
+    img.classList.add('rounded', 'border', 'border-color', 'post-img', 'me-md-2');
+    img.addEventListener('error', imgLoadError);
     let content = document.createElement('div');
     content.innerText = data.content;
-    postCard.appendChild(title);
-    postCard.appendChild(content);
+    postCardContent.appendChild(img);
+    postCardContent.appendChild(content);
+
+    //AGREGAR SECCIONES A LA CARD
+    postCard.appendChild(postCardTitleBox);
+    postCard.appendChild(postCardContent);
     return postCard;
 }
 
