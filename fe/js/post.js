@@ -14,7 +14,7 @@ let convertPostToHTMLObjects = (data) => {
     creationInformation.classList.add('d-flex', 'flex-column');
     let owner = document.createElement('a');
     owner.classList.add('owner-link');
-    owner.href = '/pages/profile/' + data.owner;
+    owner.href = '/pages/profile/' + data.ownerName;
     owner.innerText = '@' + data.ownerName;
     creationInformation.appendChild(owner);
 
@@ -34,15 +34,45 @@ let convertPostToHTMLObjects = (data) => {
     img.src = config.backend + config.endpoints.getPostImage.url + '/' + data.id;
     img.classList.add('rounded', 'border', 'border-color', 'post-img', 'me-md-2');
     img.addEventListener('error', imgLoadError);
-    let content = document.createElement('p');
-    content.classList.add('pt-2');
-    content.innerText = data.content;
+    let content = document.createElement('div');
+    content.classList.add('pt-2', 'w-100');
+    content.innerHTML= data.content;
     postCardContent.appendChild(img);
     postCardContent.appendChild(content);
+
+    //SECCION DE BOTONES
+    let postCardButtons = document.createElement('div');
+    postCardButtons.classList.add('d-flex', 'flex-row', 'justify-content-center', 'mt-2', 'pt-2', 'w-100', 'border-top', 'border-color');
+    let likeButton = document.createElement('button');
+
+    likeButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded', 'me-2');
+    let likeIcon = document.createElement('i');
+    likeIcon.classList.add('fa', 'fa-thumbs-up', 'me-2');
+    likeButton.appendChild(likeIcon);
+    likeButton.appendChild(document.createTextNode(0));
+    postCardButtons.appendChild(likeButton);
+
+    let dislikeButton = document.createElement('button');
+    dislikeButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded', 'me-2');
+    let dislikeIcon = document.createElement('i');
+    dislikeIcon.classList.add('fa', 'fa-thumbs-down', 'me-2');
+    dislikeButton.appendChild(dislikeIcon);
+    dislikeButton.appendChild(document.createTextNode(0));
+    postCardButtons.appendChild(dislikeButton);
+
+    let commentButton = document.createElement('button');
+    commentButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded');
+    let commentIcon = document.createElement('i');
+    commentIcon.classList.add('fa', 'fa-comment', 'me-2');
+    commentButton.appendChild(commentIcon);
+    commentButton.appendChild(document.createTextNode(0));
+    postCardButtons.appendChild(commentButton);
+    
 
     //AGREGAR SECCIONES A LA CARD
     postCard.appendChild(postCardTitleBox);
     postCard.appendChild(postCardContent);
+    postCard.appendChild(postCardButtons);
     return postCard;
 }
 
