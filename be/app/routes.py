@@ -1,4 +1,4 @@
-from flask import current_app as app, request, jsonify
+from flask import current_app as app, request, jsonify, make_response
 from flask_login import login_user, login_required, logout_user, current_user
 import base64
 import uuid
@@ -71,12 +71,31 @@ def getProfile():
 @login_required
 def getPost():
     try:
-        posts = Post.query.filter_by(owner=current_user.id).order_by(Post.created.desc()).all()
+        posts = Post.query.order_by(Post.created.desc()).all()
         return jsonify([{
             'id': post.id,
             'title': post.title,
             'content': post.content,
-            'created': post.created
+            'created': post.created,
+            'owner': post.owner,
+            'ownerName': User.query.filter_by(id=post.owner).first().username,
+            } for post in posts]), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+
+@app.route('/api/posts/user/<userId>', methods=['GET'])
+@login_required
+def getUserPosts(userId):
+    try:
+        posts = Post.query.filter_by(owner=userId).order_by(Post.created.desc()).all()
+        return jsonify([{
+            'id': post.id,
+            'title': post.title,
+            'content': post.content,
+            'created': post.created,
+            'owner': post.owner,
+            'ownerName': User.query.filter_by(id=post.owner).first().username
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -164,6 +183,7 @@ def createComment():
     return ''
 
 
+# Retorna la imagen como archivo binario para poder ser utilizada en un tag img
 @app.route('/api/img/post/<postId>', methods=['GET'])
 def getPostImage(postId):
     try:
@@ -173,7 +193,9 @@ def getPostImage(postId):
         if not post.image:
             return jsonify({'error': 'Post has no image'}), 404
         with open(f"uploads/{post.image}", 'rb') as f:
-            image = base64.b64encode(f.read())
-        return jsonify({'image': image.decode()}), 200
+            image = f.read()
+        response = make_response(image)
+        response.headers.set('Content-Type', 'image/png')
+        return response, 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400

@@ -1,6 +1,14 @@
 window.config = {
     "backend": "http://localhost:5000/",
     "endpoints": {
+        "getPosts": {
+          "url": "api/posts",
+          "method": "GET"
+        },
+        "getPostImage": {
+          "url": "api/img/post",
+          "method": "GET"
+        },
         "login": {
             "url": "api/login",
             "method": "POST"
