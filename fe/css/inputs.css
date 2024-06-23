@@ -1,3 +1,17 @@
 #password-toggle {
   min-width: 50px;
 }
+
+.input:has(input[required]) label::after {
+  content:'*';
+}
+
+.input:has(textarea[required]) label::after {
+  content:'*';
+}
+
+@media screen and (max-width: 576px) {
+  #new-post-form #cancel-button {
+    margin-top:1rem
+  }
+}

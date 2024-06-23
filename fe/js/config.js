@@ -1,6 +1,10 @@
 window.config = {
     "backend": "http://localhost:5000/",
     "endpoints": {
+        "newPost": {
+            "url": "api/post",
+            "method": "POST"
+        },
         "getPost": {
             "url": "api/post",
             "method": "GET"
