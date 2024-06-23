@@ -80,7 +80,7 @@ def getPost():
             'owner': post.owner,
             'ownerName': User.query.filter_by(id=post.owner).first().username,
             'likes': post.getLikes(),
-            'disLikes': post.getDislikes()
+            'dislikes': post.getDislikes()
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -99,7 +99,7 @@ def getUserPosts(userId):
             'owner': post.owner,
             'ownerName': User.query.filter_by(id=post.owner).first().username,
             'likes': post.getLikes(),
-            'disLikes': post.getDislikes()
+            'dislikes': post.getDislikes()
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -118,7 +118,7 @@ def getPostById(postId):
             'content': post.content,
             'created': post.created,
             'likes': post.getLikes(),
-            'disLikes': post.getDislikes()
+            'dislikes': post.getDislikes()
             }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -196,8 +196,11 @@ def reactPost(reactType, postId):
             if not reaction:
                 reaction = Reaction(post=postId, user=current_user.id)
 
-            reaction.setType(reactType)
-            db.session.add(reaction)
+            if reaction.type != reactType:
+                reaction.setType(reactType)
+                db.session.add(reaction)
+            else:
+                db.session.delete(reaction)
             db.session.commit()
 
         return jsonify({'message': 'Reaction added/updated successfully'}), 200
