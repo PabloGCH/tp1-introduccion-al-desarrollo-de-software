@@ -80,7 +80,9 @@ def getPost():
             'owner': post.owner,
             'ownerName': User.query.filter_by(id=post.owner).first().username,
             'likes': post.getLikes(),
-            'dislikes': post.getDislikes()
+            'dislikes': post.getDislikes(),
+            'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
+            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count()
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -99,7 +101,9 @@ def getUserPosts(userId):
             'owner': post.owner,
             'ownerName': User.query.filter_by(id=post.owner).first().username,
             'likes': post.getLikes(),
-            'dislikes': post.getDislikes()
+            'dislikes': post.getDislikes(),
+            'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
+            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count()
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -118,7 +122,9 @@ def getPostById(postId):
             'content': post.content,
             'created': post.created,
             'likes': post.getLikes(),
-            'dislikes': post.getDislikes()
+            'dislikes': post.getDislikes(),
+            'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
+            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count()
             }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400

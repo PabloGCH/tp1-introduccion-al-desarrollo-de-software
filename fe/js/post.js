@@ -50,10 +50,13 @@ let createPostContent = (data) => {
 
 let createPostButtons = (data) => {
     let content = document.createElement('div');
-    content.classList.add('post-buttons','d-flex', 'flex-row', 'justify-content-center', 'mt-2', 'pt-2', 'w-100', 'border-top', 'border-color');
+    content.classList.add('post-buttons','d-flex', 'flex-row', 'justify-content-left', 'mt-2', 'pt-2', 'w-100', 'border-top', 'border-color');
 
     let likeButton = document.createElement('button');
     likeButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded', 'me-2');
+    if (data.currentUserLikes){
+        likeButton.classList.add('text-success');
+    }
 
     let likeIcon = document.createElement('i');
     likeIcon.classList.add('fa', 'fa-thumbs-up', 'me-2');
@@ -71,6 +74,9 @@ let createPostButtons = (data) => {
 
     let dislikeButton = document.createElement('button');
     dislikeButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded', 'me-2');
+    if (data.currentUserDislikes){
+        dislikeButton.classList.add('text-danger');
+    }
 
     let dislikeIcon = document.createElement('i');
     dislikeIcon.classList.add('fa', 'fa-thumbs-down', 'me-2');
@@ -134,7 +140,9 @@ let updatePostButtons = (data, postId) => {
 
     if (postCard){
         let postButtons = createPostButtons(data);
-        postCard.replaceChild(postButtons, postCard.childNodes[2]);
+        let oldButtons = postCard.getElementsByClassName('post-buttons')[0];
+
+        postCard.replaceChild(postButtons, oldButtons);
     }
 }
 
@@ -143,7 +151,6 @@ let getPostErrorHandler = (error) => {
 }
 
 let reactToPost = (postId, reaction) => {
-    console.log(postId, reaction)
     let requestConfig = {
         method: config.endpoints.reactToPost.method,
         headers: { 'Content-Type': 'application/json' },
