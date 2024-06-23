@@ -207,4 +207,3 @@ let getLastPosts = () => {
 }
 
 getLastPosts();
-getPostWithID(155);
