@@ -28,3 +28,8 @@ class LoginFailedException(Exception):
         self.message = 'LoginFailedException'
         self.field = fields
         super().__init__(self.message)
+
+class InvalidReactionException(Exception):
+    def __init__(self):
+        self.message = 'InvalidReactionException'
+        super().__init__(self.message)
