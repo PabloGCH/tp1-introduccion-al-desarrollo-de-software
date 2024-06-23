@@ -1,6 +1,8 @@
 const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 const templateLinks = document.getElementById('sidebar-links');
 
+const currentUrl = window.location.pathname;
+
 const sidebarLinks = [{
   text: 'Posts',
   url: '/',
@@ -15,6 +17,10 @@ const sidebarLinks = [{
   icon: 'fa-solid fa-right-from-bracket'
 }];
 
+
+
+
+
 sidebarLinks.forEach((link, i) => {
   let li = document.createElement('li');
   let a = document.createElement('a');
@@ -27,7 +33,7 @@ sidebarLinks.forEach((link, i) => {
     li.classList.add('border-bottom', 'border-color');
   }
   li.appendChild(a);
-  a.classList.add('nav-link', 'text-white', 'd-block', 'w-100', 'h-100');
+  a.classList.add('nav-link', 'd-block', 'w-100', 'h-100');
   a.innerText = link.text;
   if(link.url){
     a.href = link.url;
@@ -35,5 +41,12 @@ sidebarLinks.forEach((link, i) => {
   if(link.id){
     a.id = link.id;
   }
+  if(currentUrl === link.url){
+    li.classList.add('active');
+  }
   templateLinks.appendChild(li);
 });
+
+
+
+

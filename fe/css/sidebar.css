@@ -20,7 +20,19 @@
   font-size: 1em;
 }
 
-.sidebar .nav-item:hover {
+.sidebar .nav-item a{
+  color: var(--font-color);
+}
+
+.sidebar .nav-item.active {
+  color: var(--bg-color);
+  background-color: rgba(var(--font-color-rgb), 0.8);
+}
+.sidebar .nav-item.active a {
+  color: var(--bg-color);
+}
+
+.sidebar .nav-item:hover:not(.active) {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
