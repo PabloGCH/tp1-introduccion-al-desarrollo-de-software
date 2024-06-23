@@ -20,6 +20,17 @@
   font-size: 1em;
 }
 
+
+.sidebar .nav-item:first-child {
+  border-top-right-radius: var(--bs-border-radius);
+  border-top-left-radius: var(--bs-border-radius);
+}
+
+.sidebar .nav-item:last-child {
+  border-bottom-right-radius: var(--bs-border-radius);
+  border-bottom-left-radius: var(--bs-border-radius);
+}
+
 .sidebar .nav-item a{
   color: var(--font-color);
 }
@@ -35,6 +46,7 @@
 .sidebar .nav-item:hover:not(.active) {
   background-color: rgba(255, 255, 255, 0.1);
 }
+
 
 @media screen and (max-width: 768px) {
   .sidebar {
