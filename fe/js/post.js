@@ -7,7 +7,7 @@ let convertPostToHTMLObjects = (data) => {
 
     //SECCION DE TITULO
     let postCardTitleBox = document.createElement('div');
-    postCardTitleBox.classList.add('post-title-box', 'd-flex', 'justify-content-between', 'align-items-center', 'mb-2', 'border-bottom', 'border-color', 'py-1');
+    postCardTitleBox.classList.add('post-title-box', 'd-flex', 'flex-column', 'flex-md-row', 'justify-content-between', 'mb-2', 'border-bottom', 'border-color', 'py-1');
     let title = document.createElement('h2');
     title.innerText = data.title;
     let creationInformation = document.createElement('div');
