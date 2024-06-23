@@ -1,3 +1,35 @@
 .post {
   cursor: pointer;
+  color: #EEEEEE;
+  display: block;
+  text-decoration: none;
 }
+
+.owner-link {
+  color: rgba(var(--font-color-rgb), 0.6);
+}
+
+.post-img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  background: black;
+  position: static;
+  overflow: hidden;
+  padding-top: 1px; /* Por alguna razon la imagen se sale del borde sin esto*/
+}
+
+@media (max-width: 768px) {
+  .post-img {
+    max-height: 250px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .post-img {
+    max-width: 250px;
+  }
+}
+
+
