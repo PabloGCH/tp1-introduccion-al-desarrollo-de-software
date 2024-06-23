@@ -32,5 +32,24 @@ class Post(db.Model):
     created = db.Column(db.DateTime, default=db.func.current_timestamp())
     owner = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    def getLikes(self):
+        return Reaction.query.filter_by(post=self.id, type='like').count()
+
+    def getDislikes(self):
+        return Reaction.query.filter_by(post=self.id, type='dislike').count()
+
     def __repr__(self):
         return f"<Post {self.title}>"
+
+class Reaction(db.Model):
+    __tablename__ = 'reaction'
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String(40), nullable=False)
+    post = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def setType(self, type):
+        self.type = type
+
+    def __repr__(self):
+        return f"<Reaction {self.type}>"

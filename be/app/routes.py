@@ -4,8 +4,8 @@ import base64
 import uuid
 import os
 
-from .exceptions import LoginFailedException
-from .models import (User, Post)
+from .exceptions import (LoginFailedException, InvalidReactionException)
+from .models import (User, Post, Reaction)
 from .forms_validators import (
         validate_login_form,
         validate_register_form,
@@ -79,6 +79,10 @@ def getPost():
             'created': post.created,
             'owner': post.owner,
             'ownerName': User.query.filter_by(id=post.owner).first().username,
+            'likes': post.getLikes(),
+            'dislikes': post.getDislikes(),
+            'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
+            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count()
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -95,7 +99,11 @@ def getUserPosts(userId):
             'content': post.content,
             'created': post.created,
             'owner': post.owner,
-            'ownerName': User.query.filter_by(id=post.owner).first().username
+            'ownerName': User.query.filter_by(id=post.owner).first().username,
+            'likes': post.getLikes(),
+            'dislikes': post.getDislikes(),
+            'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
+            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count()
             } for post in posts]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -112,7 +120,11 @@ def getPostById(postId):
             'id': post.id,
             'title': post.title,
             'content': post.content,
-            'created': post.created
+            'created': post.created,
+            'likes': post.getLikes(),
+            'dislikes': post.getDislikes(),
+            'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
+            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count()
             }), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -176,6 +188,30 @@ def updatePost():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
+
+@app.route('/api/post/react/<reactType>/<postId>', methods=['POST'])
+@login_required
+def reactPost(reactType, postId):
+    try:
+        if reactType not in ['like', 'dislike']:
+            raise InvalidReactionException()
+
+        post = Post.query.filter_by(id=postId).first()
+        if post:
+            reaction = Reaction.query.filter_by(post=postId, user=current_user.id).first()
+            if not reaction:
+                reaction = Reaction(post=postId, user=current_user.id)
+
+            if reaction.type != reactType:
+                reaction.setType(reactType)
+                db.session.add(reaction)
+            else:
+                db.session.delete(reaction)
+            db.session.commit()
+
+        return jsonify({'message': 'Reaction added/updated successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 @app.route('/api/post/comment', methods=['POST'])
 @login_required
