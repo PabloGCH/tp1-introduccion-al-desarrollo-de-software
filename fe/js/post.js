@@ -100,9 +100,36 @@ let createPostButtons = (data) => {
     // commentButton.appendChild(document.createTextNode(0));
     // postCardButtons.appendChild(commentButton);
 
+    let editButton = document.createElement('button');
+    let deleteButton = document.createElement('button');
+    if(data.currentUserIsOwner){
+        editButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded', 'ms-auto');
+        let editIcon = document.createElement('i');
+        editIcon.classList.add('fa', 'fa-edit');
+        editButton.appendChild(editIcon);
+        editButton.addEventListener('click', (e) => {
+            e.preventDefault()
+            window.location.href = '/pages/edit-post/' + data.id;
+        });
+
+        deleteButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded', 'ms-2', 'text-danger');
+        let deleteIcon = document.createElement('i');
+        deleteIcon.classList.add('fa', 'fa-trash');
+        deleteButton.appendChild(deleteIcon);
+        deleteButton.addEventListener('click', (e) => {
+            e.preventDefault()
+            deletePost(data.id);
+        });
+
+    }
 
     content.appendChild(likeButton);
     content.appendChild(dislikeButton);
+    if(data.currentUserIsOwner){
+        content.appendChild(editButton);
+        content.appendChild(deleteButton);
+    }
+
     return content;
 }
 

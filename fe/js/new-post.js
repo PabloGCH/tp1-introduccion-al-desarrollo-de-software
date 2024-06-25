@@ -52,3 +52,11 @@ let responseHandler = (response) => {
 const unknownErrorHandler = (error) => {
     errorToast('Error desconocido');
 }
+
+let createHandler = (data) => {
+    window.location.href = '/';
+}
+
+let createErrorHandler = (error) => {
+    errorToast(e.getMessage());
+}
