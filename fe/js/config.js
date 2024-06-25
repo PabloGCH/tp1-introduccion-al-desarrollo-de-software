@@ -54,5 +54,6 @@ window.backendErrors = {
     "VerifyFieldException":"Los campos no coinciden.",
     "UsernameExistsException":"Usuario actualmente en uso.",
     "EmailAlreadyUsedException":"Email actualmente en uso.",
-    "LoginFailedException":"Usuario o contraseña incorrectos."
+    "LoginFailedException":"Usuario o contraseña incorrectos.",
+    "PermissionDeniedException":"No tienes permisos para realizar esta acción.",
 }

@@ -32,7 +32,7 @@ form.addEventListener('submit', (e) => {
 
     fetch(config.backend + config.endpoints.editPost.url, requestConfig)
         .then(editResponseHandler)
-        .catch(unknownErrorHandler);
+        .catch(UnknownErrorHandler);
 });
 
 let imageInput = document.getElementById('image');
@@ -52,27 +52,19 @@ let editResponseHandler = (response) => {
     if (response.ok) {
         response.json().then(editHandler);
     } else {
-        response.json().then(errorHandler);
+        response.json().then(ErrorHandler);
     }
-}
-
-const unknownErrorHandler = (error) => {
-    errorToast('Error desconocido');
 }
 
 let editHandler = (data) => {
     window.location.href = '/';
 }
 
-let errorHandler = (error) => {
-    errorToast(e.getMessage());
-}
-
 let GetPostResponseHandler = (response) => {
     if (response.ok) {
         response.json().then(loadPostDataHandler);
     } else {
-        response.json().then(errorHandler);
+        response.json().then(ErrorHandler);
     }
 }
 
@@ -97,7 +89,7 @@ let getPostData = () => {
 
     fetch(config.backend + config.endpoints.getPost.url + '/' + postId, requestConfig)
         .then(GetPostResponseHandler)
-        .catch(unknownErrorHandler);
+        .catch(UnknownErrorHandler);
 }
 
 getPostData();

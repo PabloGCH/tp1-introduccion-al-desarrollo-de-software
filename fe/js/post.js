@@ -1,5 +1,3 @@
-
-
 let createPostHeader = (data) => {
     let container = document.createElement('div');
     container.classList.add('post-header', 'd-flex', 'flex-column', 'flex-md-row', 'justify-content-between', 'mb-2', 'border-bottom', 'border-color', 'py-1');
@@ -133,7 +131,6 @@ let createPostButtons = (data) => {
     return content;
 }
 
-
 let convertPostToHTMLObjects = (data) => {
     let postCard = document.createElement('div');
     postCard.classList.add('post', 'surface', 'shadow', 'rounded', 'border', 'border-color', 'p-2', 'mb-2')
@@ -173,10 +170,6 @@ let updatePostButtons = (data, postId) => {
     }
 }
 
-let ErrorHandler = (error) => {
-    errorToast('Error desconocido');
-}
-
 let reactToPost = (postId, reaction) => {
     let requestConfig = {
         method: config.endpoints.reactToPost.method,
@@ -189,11 +182,7 @@ let reactToPost = (postId, reaction) => {
             getPostWithID(postId).then(response => response.json())
             .then(data => updatePostButtons(data, postId))
         })
-        .catch(unknownErrorHandler);
-}
-
-const unknownErrorHandler = (error) => {
-    errorToast('Error desconocido');
+        .catch(UnknownErrorHandler);
 }
 
 const responsePostsHandler = (response) => {
@@ -208,7 +197,6 @@ const responsePostsHandler = (response) => {
       response.json().then(ErrorHandler);
   }
 }
-
 
 let deletePost = (postId) => {
     let requestConfig = {
@@ -229,7 +217,7 @@ let deletePost = (postId) => {
                 response.json().then(ErrorHandler);
             }
         })
-        .catch(unknownErrorHandler);
+        .catch(UnknownErrorHandler);
 
 
 }
@@ -254,7 +242,7 @@ let getLastPosts = () => {
 
     fetch(config.backend + config.endpoints.getPosts.url, requestConfig)
         .then(responsePostsHandler)
-        .catch(unknownErrorHandler);
+        .catch(UnknownErrorHandler);
 }
 
 getLastPosts();

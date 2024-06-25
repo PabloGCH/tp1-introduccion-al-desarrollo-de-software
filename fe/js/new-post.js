@@ -25,7 +25,7 @@ form.addEventListener('submit', (e) => {
 
     fetch(config.backend + config.endpoints.newPost.url, requestConfig)
         .then(responseHandler)
-        .catch(unknownErrorHandler);
+        .catch(UnknownErrorHandler);
 });
 
 let imageInput = document.getElementById('image');
@@ -45,18 +45,10 @@ let responseHandler = (response) => {
     if (response.ok) {
         response.json().then(createHandler);
     } else {
-        response.json().then(createErrorHandler);
+        response.json().then(ErrorHandler);
     }
-}
-
-const unknownErrorHandler = (error) => {
-    errorToast('Error desconocido');
 }
 
 let createHandler = (data) => {
     window.location.href = '/';
-}
-
-let createErrorHandler = (error) => {
-    errorToast(e.getMessage());
 }

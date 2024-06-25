@@ -4,19 +4,22 @@ import base64
 import uuid
 import os
 
-from .exceptions import (LoginFailedException, InvalidReactionException)
+from .exceptions import (
+    CustomErrorException,
+    LoginFailedException,
+    InvalidReactionException,
+    PermissionDeniedException,
+    PostNotFoundException)
 from .models import (User, Post, Reaction)
 from .forms_validators import (
         validate_login_form,
         validate_register_form,
-        validate_post_form
-        )
+        validate_post_form)
 from . import db
 from . import login_manager
 
 # API
 # ================
-
 @app.route('/api/login', methods=['POST'])
 def login():
     try:
@@ -31,7 +34,7 @@ def login():
         login_user(user)
         return jsonify({'user': {'username': user.username, 'name': user.name, 'surname': user.surname, 'avatar': user.avatar}}), 200
 
-    except Exception as e:
+    except CustomErrorException as e:
         return jsonify({'message': str(e), 'field': e.field}), 400
 
 @app.route('/api/logout', methods=['POST'])
@@ -58,8 +61,8 @@ def register():
 
         return jsonify({'message': 'User created successfully'}), 201
 
-    except Exception as e:
-        return jsonify({'message': str(e), 'field': e.field}), 400
+    except CustomErrorException as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/profile/<userId>', methods=['GET'])
@@ -86,8 +89,8 @@ def getPost():
             'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
             'currentUserIsOwner': post.owner == current_user.id
             } for post in posts]), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except CustomErrorException as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/posts/user/<userId>', methods=['GET'])
@@ -109,8 +112,8 @@ def getUserPosts(userId):
             'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
             'currentUserIsOwner': post.owner == current_user.id
             } for post in posts]), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except CustomErrorException as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/post/<postId>', methods=['GET'])
@@ -119,7 +122,7 @@ def getPostById(postId):
     try:
         post = Post.query.filter_by(id=postId).first()
         if not post:
-            return jsonify({'error': 'Post not found'}), 404
+            raise PostNotFoundException()
         return jsonify({
             'id': post.id,
             'title': post.title,
@@ -133,8 +136,8 @@ def getPostById(postId):
             'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
             'currentUserIsOwner': post.owner == current_user.id
             }), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except CustomErrorException as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/post', methods=['POST'])
@@ -160,8 +163,8 @@ def createPost():
         db.session.add(new_post)
         db.session.commit()
         return ({'message': 'Post created successfully'}), 201
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except CustomErrorException as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/post', methods=['DELETE'])
@@ -171,11 +174,13 @@ def deletePost():
         data = request.json
         post = Post.query.filter_by(id=data['id']).first()
         if not post:
-            return jsonify({'error': 'Post not found'}), 404
+            raise PostNotFoundException()
+        if post.owner != current_user.id:
+            raise PermissionDeniedException()
         db.session.delete(post)
         db.session.commit()
         return jsonify({'message': 'Post deleted successfully'}), 200
-    except Exception as e:
+    except CustomErrorException as e:
         return jsonify({'error': str(e)}), 400
 
 
@@ -187,7 +192,9 @@ def updatePost():
         validate_post_form(data)
         post = Post.query.filter_by(id=data['id']).first()
         if not post:
-            return jsonify({'error': 'Post not found'}), 404
+            raise PostNotFoundException()
+        if post.owner != current_user.id:
+            raise PermissionDeniedException()
         post.title = data['title']
         post.content = data['content']
         if 'image' in data:
@@ -201,8 +208,8 @@ def updatePost():
             post.image = filename
         db.session.commit()
         return jsonify({'message': 'Post updated successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except CustomErrorException as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/post/react/<reactType>/<postId>', methods=['POST'])
@@ -213,21 +220,24 @@ def reactPost(reactType, postId):
             raise InvalidReactionException()
 
         post = Post.query.filter_by(id=postId).first()
-        if post:
-            reaction = Reaction.query.filter_by(post=postId, user=current_user.id).first()
-            if not reaction:
-                reaction = Reaction(post=postId, user=current_user.id)
+        if not post:
+            raise PostNotFoundException()
 
-            if reaction.type != reactType:
-                reaction.setType(reactType)
-                db.session.add(reaction)
-            else:
-                db.session.delete(reaction)
-            db.session.commit()
+        reaction = Reaction.query.filter_by(post=postId, user=current_user.id).first()
+        if not reaction:
+            reaction = Reaction(post=postId, user=current_user.id)
+
+        if reaction.type != reactType:
+            reaction.setType(reactType)
+            db.session.add(reaction)
+        else:
+            db.session.delete(reaction)
+
+        db.session.commit()
 
         return jsonify({'message': 'Reaction added/updated successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except CustomErrorException as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 @app.route('/api/post/comment', methods=['POST'])
 @login_required
@@ -241,7 +251,7 @@ def getPostImage(postId):
     try:
         post = Post.query.filter_by(id=postId).first()
         if not post:
-            return jsonify({'error': 'Post not found'}), 404
+            raise PostNotFoundException()
         if not post.image:
             return jsonify({'error': 'Post has no image'}), 404
         with open(f"uploads/{post.image}", 'rb') as f:
@@ -249,5 +259,5 @@ def getPostImage(postId):
         response = make_response(image)
         response.headers.set('Content-Type', 'image/png')
         return response, 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except CustomErrorException as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code

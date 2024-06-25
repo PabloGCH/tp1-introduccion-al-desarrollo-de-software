@@ -16,17 +16,17 @@ const login = (e) => {
     }
 
     fetch(config.backend + config.endpoints.login.url, requestConfig)
-        .then(responseHandler)
-        .catch(unknownErrorHandler)
+        .then(ResponseHandler)
+        .catch(UnknownErrorHandler)
 };
 
 loginForm.addEventListener('submit', login);
 
-const responseHandler = (response) => {
+const ResponseHandler = (response) => {
     if (response.ok) {
         response.json().then(loginHandler);
     } else {
-        response.json().then(loginErrorHandler);
+        response.json().then(ErrorHandler);
     }
 }
 
@@ -34,24 +34,4 @@ const loginHandler = (data) => {
     const currentUser = JSON.stringify(data.user);
     sessionStorage.setItem(window.sessionStorageKeys["currentUser"], currentUser);
     window.location.href = '/';
-}
-
-const loginErrorHandler = (error) => {
-    if(error.message){
-        errorToast(window.backendErrors[error.message]);
-    }
-    if(error.field){
-        error.field.forEach(field => {
-            let input = document.getElementById(field);
-            input.classList.add('is-invalid');
-            let inputValidate = document.getElementById(field+"-verify");
-            if(inputValidate){
-                inputValidate.classList.add('is-invalid');
-            }
-        });
-    }
-}
-
-const unknownErrorHandler = (error) => {
-    errorToast('Error desconocido');
 }
