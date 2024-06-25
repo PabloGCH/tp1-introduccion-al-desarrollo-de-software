@@ -9,6 +9,10 @@ window.config = {
             "url": "api/post",
             "method": "PUT"
         },
+        "deletePost": {
+            "url": "api/post",
+            "method": "DELETE"
+        },
         "getPost": {
             "url": "api/post",
             "method": "GET"

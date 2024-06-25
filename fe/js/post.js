@@ -173,7 +173,7 @@ let updatePostButtons = (data, postId) => {
     }
 }
 
-let getPostErrorHandler = (error) => {
+let ErrorHandler = (error) => {
     errorToast('Error desconocido');
 }
 
@@ -205,10 +205,34 @@ const responsePostsHandler = (response) => {
         });
       });
   } else {
-      response.json().then(getPostErrorHandler);
+      response.json().then(ErrorHandler);
   }
 }
 
+
+let deletePost = (postId) => {
+    let requestConfig = {
+        method: config.endpoints.deletePost.method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({id: postId}),
+        credentials: 'include'
+    };
+
+    fetch(config.backend + config.endpoints.deletePost.url, requestConfig)
+        .then(response => {
+            console.log(response);
+            if (response.ok) {
+                let postCard = document.getElementById('post-'+postId);
+                postCard.remove();
+                successToast('Post eliminado');
+            } else {
+                response.json().then(ErrorHandler);
+            }
+        })
+        .catch(unknownErrorHandler);
+
+
+}
 
 let getPostWithID = (postId) => {
 
