@@ -109,7 +109,7 @@ let createPostButtons = (data) => {
         editButton.appendChild(editIcon);
         editButton.addEventListener('click', (e) => {
             e.preventDefault()
-            window.location.href = '/pages/edit-post/' + data.id;
+            window.location.href = '/pages/edit-post?postId=' + data.id;
         });
 
         deleteButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded', 'ms-2', 'text-danger');

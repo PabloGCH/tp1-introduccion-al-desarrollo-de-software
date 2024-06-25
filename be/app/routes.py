@@ -190,6 +190,15 @@ def updatePost():
             return jsonify({'error': 'Post not found'}), 404
         post.title = data['title']
         post.content = data['content']
+        if 'image' in data:
+            file = base64.b64decode(data['image'])
+            filename = f"{uuid.uuid4()}.png"
+            # Creates uploads folder if it doesn't exist
+            if not os.path.exists('uploads'):
+                os.makedirs('uploads')
+            with open(f"uploads/{filename}", 'wb') as f:
+                f.write(file)
+            post.image = filename
         db.session.commit()
         return jsonify({'message': 'Post updated successfully'}), 200
     except Exception as e:

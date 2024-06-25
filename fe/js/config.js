@@ -5,6 +5,10 @@ window.config = {
             "url": "api/post",
             "method": "POST"
         },
+        "editPost": {
+            "url": "api/post",
+            "method": "PUT"
+        },
         "getPost": {
             "url": "api/post",
             "method": "GET"
