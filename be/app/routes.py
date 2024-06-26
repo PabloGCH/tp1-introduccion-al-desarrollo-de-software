@@ -5,7 +5,6 @@ import uuid
 import os
 
 from .exceptions import (
-    CustomErrorException,
     LoginFailedException,
     InvalidReactionException,
     PermissionDeniedException,
@@ -34,8 +33,8 @@ def login():
         login_user(user)
         return jsonify({'user': {'username': user.username, 'name': user.name, 'surname': user.surname, 'avatar': user.avatar}}), 200
 
-    except CustomErrorException as e:
-        return jsonify({'message': str(e), 'field': e.field}), 400
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
@@ -61,7 +60,7 @@ def register():
 
         return jsonify({'message': 'User created successfully'}), 201
 
-    except CustomErrorException as e:
+    except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
@@ -89,7 +88,7 @@ def getPost():
             'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
             'currentUserIsOwner': post.owner == current_user.id
             } for post in posts]), 200
-    except CustomErrorException as e:
+    except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
@@ -112,7 +111,7 @@ def getUserPosts(userId):
             'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
             'currentUserIsOwner': post.owner == current_user.id
             } for post in posts]), 200
-    except CustomErrorException as e:
+    except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
@@ -136,7 +135,7 @@ def getPostById(postId):
             'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
             'currentUserIsOwner': post.owner == current_user.id
             }), 200
-    except CustomErrorException as e:
+    except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
@@ -163,7 +162,7 @@ def createPost():
         db.session.add(new_post)
         db.session.commit()
         return ({'message': 'Post created successfully'}), 201
-    except CustomErrorException as e:
+    except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
@@ -180,8 +179,8 @@ def deletePost():
         db.session.delete(post)
         db.session.commit()
         return jsonify({'message': 'Post deleted successfully'}), 200
-    except CustomErrorException as e:
-        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/post', methods=['PUT'])
@@ -208,7 +207,7 @@ def updatePost():
             post.image = filename
         db.session.commit()
         return jsonify({'message': 'Post updated successfully'}), 200
-    except CustomErrorException as e:
+    except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
@@ -236,7 +235,7 @@ def reactPost(reactType, postId):
         db.session.commit()
 
         return jsonify({'message': 'Reaction added/updated successfully'}), 200
-    except CustomErrorException as e:
+    except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
 @app.route('/api/post/comment', methods=['POST'])
@@ -259,5 +258,5 @@ def getPostImage(postId):
         response = make_response(image)
         response.headers.set('Content-Type', 'image/png')
         return response, 200
-    except CustomErrorException as e:
+    except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code

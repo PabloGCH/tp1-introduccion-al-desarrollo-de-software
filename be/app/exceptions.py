@@ -6,14 +6,13 @@ class CustomErrorException(Exception):
         super().__init__(self.message)
 
 class MissingFieldException(CustomErrorException):
-    def __init__(self, missing_fields):
+    def __init__(self, fields):
         self.message = 'MissingFieldException'
-        self.field = missing_fields
+        self.field = fields
         super().__init__(self.message)
 
 class VerifyFieldException(CustomErrorException):
     def __init__(self, field):
-        self.field = field
         self.message = 'VerifyFieldException'
         self.field = [field]
         super().__init__(self.message)
@@ -30,7 +29,7 @@ class EmailAlreadyUsedException(CustomErrorException):
         self.field = [field]
         super().__init__(self.message)
 
-class LoginFailedException(CustomErrorException):
+class LoginFailedException(Exception):
     def __init__(self, fields):
         self.message = 'LoginFailedException'
         self.field = fields
@@ -44,6 +43,7 @@ class InvalidReactionException(CustomErrorException):
 class PermissionDeniedException(CustomErrorException):
     def __init__(self):
         self.message = 'PermissionDeniedException'
+        self.code = 403
         super().__init__(self.message)
 
 class PostNotFoundException(CustomErrorException):
