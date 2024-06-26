@@ -129,6 +129,7 @@ def getPostById(postId):
             'created': post.created,
             'image': post.image,
             'owner': post.owner,
+            'ownerName': User.query.filter_by(id=post.owner).first().username,
             'likes': post.getLikes(),
             'dislikes': post.getDislikes(),
             'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),

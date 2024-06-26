@@ -185,19 +185,6 @@ let reactToPost = (postId, reaction) => {
         .catch(UnknownErrorHandler);
 }
 
-const responsePostsHandler = (response) => {
-  if (response.ok) {
-      response.json().then((data) => {
-        let posts = data || [];
-        posts.forEach(post => {
-            createPost(post);
-        });
-      });
-  } else {
-      response.json().then(ErrorHandler);
-  }
-}
-
 let deletePost = (postId) => {
     let requestConfig = {
         method: config.endpoints.deletePost.method,
@@ -240,9 +227,34 @@ let getLastPosts = () => {
         credentials: 'include'
     };
 
-    fetch(config.backend + config.endpoints.getPosts.url, requestConfig)
-        .then(responsePostsHandler)
-        .catch(UnknownErrorHandler);
+    return fetch(config.backend + config.endpoints.getPosts.url, requestConfig)
 }
 
-getLastPosts();
+const responsePostsHandler = (response) => {
+    if (response.ok) {
+        response.json().then((data) => {
+                if (!data.length){
+                    data = [data];
+                }
+                let posts = data || [];
+                posts.forEach(post => {
+                    createPost(post);
+                });
+            });
+        } else {
+            response.json().then(ErrorHandler);
+        }
+    }
+
+let currentLocation = window.location.href;
+
+if (currentLocation.includes('/pages/post')) {
+    let urlParams = new URLSearchParams(window.location.search);
+    let postId = urlParams.get('postId');
+
+    getPostWithID(postId).then(responsePostsHandler)
+    .catch(UnknownErrorHandler);
+} else {
+    getLastPosts().then(responsePostsHandler)
+    .catch(UnknownErrorHandler);
+}
