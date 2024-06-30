@@ -73,7 +73,7 @@ def getProfile():
 @login_required
 def getPost():
     try:
-        posts = Post.query.order_by(Post.created.desc()).all()
+        posts = Post.query.filter_by(deletedAt=None).order_by(Post.created.desc()).all()
         return jsonify([{
             'id': post.id,
             'title': post.title,
@@ -124,9 +124,10 @@ def getPostById(postId):
             raise PostNotFoundException()
         return jsonify({
             'id': post.id,
-            'title': post.title,
-            'content': post.content,
+            'title': '' if post.deletedAt else post.title,
+            'content': 'Deleted post' if post.deletedAt else post.content,
             'created': post.created,
+            'deleted': True if post.deletedAt else False,
             'image': post.image,
             'owner': post.owner,
             'ownerName': User.query.filter_by(id=post.owner).first().username,
@@ -177,7 +178,8 @@ def deletePost():
             raise PostNotFoundException()
         if post.owner != current_user.id:
             raise PermissionDeniedException()
-        db.session.delete(post)
+
+        post.delete()
         db.session.commit()
         return jsonify({'message': 'Post deleted successfully'}), 200
     except Exception as e:
