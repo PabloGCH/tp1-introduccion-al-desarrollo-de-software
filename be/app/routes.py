@@ -8,7 +8,8 @@ from .exceptions import (
     LoginFailedException,
     InvalidReactionException,
     PermissionDeniedException,
-    PostNotFoundException)
+    PostNotFoundException,
+    InvalidFilterException)
 from .models import (User, Post, Reaction)
 from .forms_validators import (
         validate_login_form,
@@ -64,7 +65,7 @@ def register():
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
-@app.route('/api/profile/<userId>', methods=['GET'])
+@app.route('/api/profile/<username>', methods=['GET'])
 def getProfile():
     return ''
 
@@ -74,20 +75,30 @@ def getProfile():
 def getPost():
     try:
         posts = Post.query.filter_by(deletedAt=None).order_by(Post.created.desc()).all()
-        return jsonify([{
-            'id': post.id,
-            'title': post.title,
-            'content': post.content,
-            'created': post.created,
-            'image': post.image,
-            'owner': post.owner,
-            'ownerName': User.query.filter_by(id=post.owner).first().username,
-            'likes': post.getLikes(),
-            'dislikes': post.getDislikes(),
-            'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
-            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
-            'currentUserIsOwner': post.owner == current_user.id
-            } for post in posts]), 200
+        return jsonify([convertPostToResponse(post) for post in posts]), 200
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
+
+
+@app.route('/api/posts/<username>/<filter>', methods=['GET'])
+@login_required
+def getPostForUser(username, filter):
+    try:
+        if filter not in ['last-posts', 'like', 'dislike']:
+            raise InvalidFilterException()
+
+        if filter == 'last-posts':
+            posts = Post.query.join(User).filter(
+                Post.deletedAt.is_(None),
+                User.username == username
+            ).order_by(Post.created.desc()).all()
+        else:
+            posts = Post.query.join(Reaction).join(User).filter(
+                Post.deletedAt.is_(None),
+                User.username == username,
+                Reaction.type == filter
+            ).order_by(Post.created.desc()).all()
+        return jsonify([convertPostToResponse(post) for post in posts]), 200
     except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
@@ -97,20 +108,7 @@ def getPost():
 def getUserPosts(userId):
     try:
         posts = Post.query.filter_by(owner=userId).order_by(Post.created.desc()).all()
-        return jsonify([{
-            'id': post.id,
-            'title': post.title,
-            'content': post.content,
-            'created': post.created,
-            'image': post.image,
-            'owner': post.owner,
-            'ownerName': User.query.filter_by(id=post.owner).first().username,
-            'likes': post.getLikes(),
-            'dislikes': post.getDislikes(),
-            'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
-            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
-            'currentUserIsOwner': post.owner == current_user.id
-            } for post in posts]), 200
+        return jsonify([convertPostToResponse(post) for post in posts]), 200
     except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
@@ -122,21 +120,7 @@ def getPostById(postId):
         post = Post.query.filter_by(id=postId).first()
         if not post:
             raise PostNotFoundException()
-        return jsonify({
-            'id': post.id,
-            'title': '' if post.deletedAt else post.title,
-            'content': 'Deleted post' if post.deletedAt else post.content,
-            'created': post.created,
-            'deleted': True if post.deletedAt else False,
-            'image': post.image,
-            'owner': post.owner,
-            'ownerName': User.query.filter_by(id=post.owner).first().username,
-            'likes': post.getLikes(),
-            'dislikes': post.getDislikes(),
-            'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
-            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
-            'currentUserIsOwner': post.owner == current_user.id
-            }), 200
+        return jsonify(convertPostToResponse(post)), 200
     except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
@@ -263,3 +247,23 @@ def getPostImage(postId):
         return response, 200
     except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
+
+
+def convertPostToResponse(post):
+    result = {
+        'id': post.id,
+        'title': '' if post.deletedAt else post.title,
+        'content': 'Deleted post' if post.deletedAt else post.content,
+        'created': post.created,
+        'deleted': True if post.deletedAt else False,
+        'image': post.image,
+        'owner': post.owner,
+        'ownerName': User.query.filter_by(id=post.owner).first().username,
+        'likes': post.getLikes(),
+        'dislikes': post.getDislikes(),
+        'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
+        'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
+        'currentUserIsOwner': post.owner == current_user.id
+    }
+
+    return result
