@@ -103,16 +103,6 @@ def getPostForUser(username, filter):
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
-@app.route('/api/posts/user/<userId>', methods=['GET'])
-@login_required
-def getUserPosts(userId):
-    try:
-        posts = Post.query.filter_by(owner=userId).order_by(Post.created.desc()).all()
-        return jsonify([convertPostToResponse(post) for post in posts]), 200
-    except Exception as e:
-        return jsonify({'message': str(e), 'field': e.field}), e.code
-
-
 @app.route('/api/post/<postId>', methods=['GET'])
 @login_required
 def getPostById(postId):
