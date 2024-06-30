@@ -133,9 +133,12 @@ let createPostButtons = (data) => {
 
 let convertPostToHTMLObjects = (data) => {
     let postCard = document.createElement('div');
-    postCard.classList.add('post', 'surface', 'shadow', 'rounded', 'border', 'border-color', 'p-2', 'mb-2')
-    postCard.href = '/pages/post/' + data.id;
+    postCard.classList.add('post', 'relative', 'surface', 'shadow', 'rounded', 'border', 'border-color', 'p-2', 'mb-2')
     postCard.id='post-'+data.id;
+
+    let redirect = document.createElement('a');
+    redirect.classList.add('absolute','inset-0')
+    redirect.href = '/pages/post?postId=' + data.id;
 
     //SECCION DE TITULO
     let postHeader = createPostHeader(data);
@@ -147,6 +150,7 @@ let convertPostToHTMLObjects = (data) => {
     let postButtons = createPostButtons(data);
 
     //AGREGAR SECCIONES A LA CARD
+    postCard.appendChild(redirect);
     postCard.appendChild(postHeader);
     postCard.appendChild(postContent);
     postCard.appendChild(postButtons);
