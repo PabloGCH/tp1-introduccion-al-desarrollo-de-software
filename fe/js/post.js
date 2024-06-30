@@ -1,5 +1,3 @@
-
-
 let createPostHeader = (data) => {
     let container = document.createElement('div');
     container.classList.add('post-header', 'd-flex', 'flex-column', 'flex-md-row', 'justify-content-between', 'mb-2', 'border-bottom', 'border-color', 'py-1');
@@ -100,18 +98,47 @@ let createPostButtons = (data) => {
     // commentButton.appendChild(document.createTextNode(0));
     // postCardButtons.appendChild(commentButton);
 
+    let editButton = document.createElement('button');
+    let deleteButton = document.createElement('button');
+    if(data.currentUserIsOwner){
+        editButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded', 'ms-auto');
+        let editIcon = document.createElement('i');
+        editIcon.classList.add('fa', 'fa-edit');
+        editButton.appendChild(editIcon);
+        editButton.addEventListener('click', (e) => {
+            e.preventDefault()
+            window.location.href = '/pages/edit-post?postId=' + data.id;
+        });
+
+        deleteButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded', 'ms-2', 'text-danger');
+        let deleteIcon = document.createElement('i');
+        deleteIcon.classList.add('fa', 'fa-trash');
+        deleteButton.appendChild(deleteIcon);
+        deleteButton.addEventListener('click', (e) => {
+            e.preventDefault()
+            deletePost(data.id);
+        });
+
+    }
 
     content.appendChild(likeButton);
     content.appendChild(dislikeButton);
+    if(data.currentUserIsOwner){
+        content.appendChild(editButton);
+        content.appendChild(deleteButton);
+    }
+
     return content;
 }
 
-
 let convertPostToHTMLObjects = (data) => {
     let postCard = document.createElement('div');
-    postCard.classList.add('post', 'surface', 'shadow', 'rounded', 'border', 'border-color', 'p-2', 'mb-2')
-    postCard.href = '/pages/post/' + data.id;
+    postCard.classList.add('post', 'relative', 'surface', 'shadow', 'rounded', 'border', 'border-color', 'p-2', 'mb-2')
     postCard.id='post-'+data.id;
+
+    let redirect = document.createElement('a');
+    redirect.classList.add('absolute','inset-0')
+    redirect.href = '/pages/post?postId=' + data.id;
 
     //SECCION DE TITULO
     let postHeader = createPostHeader(data);
@@ -123,6 +150,7 @@ let convertPostToHTMLObjects = (data) => {
     let postButtons = createPostButtons(data);
 
     //AGREGAR SECCIONES A LA CARD
+    postCard.appendChild(redirect);
     postCard.appendChild(postHeader);
     postCard.appendChild(postContent);
     postCard.appendChild(postButtons);
@@ -146,10 +174,6 @@ let updatePostButtons = (data, postId) => {
     }
 }
 
-let getPostErrorHandler = (error) => {
-    errorToast('Error desconocido');
-}
-
 let reactToPost = (postId, reaction) => {
     let requestConfig = {
         method: config.endpoints.reactToPost.method,
@@ -162,26 +186,32 @@ let reactToPost = (postId, reaction) => {
             getPostWithID(postId).then(response => response.json())
             .then(data => updatePostButtons(data, postId))
         })
-        .catch(unknownErrorHandler);
+        .catch(UnknownErrorHandler);
 }
 
-const unknownErrorHandler = (error) => {
-    errorToast('Error desconocido');
-}
+let deletePost = (postId) => {
+    let requestConfig = {
+        method: config.endpoints.deletePost.method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({id: postId}),
+        credentials: 'include'
+    };
 
-const responsePostsHandler = (response) => {
-  if (response.ok) {
-      response.json().then((data) => {
-        let posts = data || [];
-        posts.forEach(post => {
-            createPost(post);
-        });
-      });
-  } else {
-      response.json().then(getPostErrorHandler);
-  }
-}
+    fetch(config.backend + config.endpoints.deletePost.url, requestConfig)
+        .then(response => {
+            console.log(response);
+            if (response.ok) {
+                let postCard = document.getElementById('post-'+postId);
+                postCard.remove();
+                successToast('Post eliminado');
+            } else {
+                response.json().then(ErrorHandler);
+            }
+        })
+        .catch(UnknownErrorHandler);
 
+
+}
 
 let getPostWithID = (postId) => {
 
@@ -201,9 +231,34 @@ let getLastPosts = () => {
         credentials: 'include'
     };
 
-    fetch(config.backend + config.endpoints.getPosts.url, requestConfig)
-        .then(responsePostsHandler)
-        .catch(unknownErrorHandler);
+    return fetch(config.backend + config.endpoints.getPosts.url, requestConfig)
 }
 
-getLastPosts();
+const responsePostsHandler = (response) => {
+    if (response.ok) {
+        response.json().then((data) => {
+                if (!data.length){
+                    data = [data];
+                }
+                let posts = data || [];
+                posts.forEach(post => {
+                    createPost(post);
+                });
+            });
+        } else {
+            response.json().then(ErrorHandler);
+        }
+    }
+
+let currentLocation = window.location.href;
+
+if (currentLocation.includes('/pages/post')) {
+    let urlParams = new URLSearchParams(window.location.search);
+    let postId = urlParams.get('postId');
+
+    getPostWithID(postId).then(responsePostsHandler)
+    .catch(UnknownErrorHandler);
+} else {
+    getLastPosts().then(responsePostsHandler)
+    .catch(UnknownErrorHandler);
+}

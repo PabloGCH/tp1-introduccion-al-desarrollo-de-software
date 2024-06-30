@@ -1,6 +1,18 @@
 window.config = {
     "backend": "http://localhost:5000/",
     "endpoints": {
+        "newPost": {
+            "url": "api/post",
+            "method": "POST"
+        },
+        "editPost": {
+            "url": "api/post",
+            "method": "PUT"
+        },
+        "deletePost": {
+            "url": "api/post",
+            "method": "DELETE"
+        },
         "getPost": {
             "url": "api/post",
             "method": "GET"
@@ -42,5 +54,6 @@ window.backendErrors = {
     "VerifyFieldException":"Los campos no coinciden.",
     "UsernameExistsException":"Usuario actualmente en uso.",
     "EmailAlreadyUsedException":"Email actualmente en uso.",
-    "LoginFailedException":"Usuario o contraseña incorrectos."
+    "LoginFailedException":"Usuario o contraseña incorrectos.",
+    "PermissionDeniedException":"No tienes permisos para realizar esta acción.",
 }

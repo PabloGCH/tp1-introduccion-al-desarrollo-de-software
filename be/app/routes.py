@@ -4,19 +4,21 @@ import base64
 import uuid
 import os
 
-from .exceptions import (LoginFailedException, InvalidReactionException)
+from .exceptions import (
+    LoginFailedException,
+    InvalidReactionException,
+    PermissionDeniedException,
+    PostNotFoundException)
 from .models import (User, Post, Reaction)
 from .forms_validators import (
         validate_login_form,
         validate_register_form,
-        validate_post_form
-        )
+        validate_post_form)
 from . import db
 from . import login_manager
 
 # API
 # ================
-
 @app.route('/api/login', methods=['POST'])
 def login():
     try:
@@ -32,7 +34,7 @@ def login():
         return jsonify({'user': {'username': user.username, 'name': user.name, 'surname': user.surname, 'avatar': user.avatar}}), 200
 
     except Exception as e:
-        return jsonify({'message': str(e), 'field': e.field}), 400
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
@@ -59,7 +61,7 @@ def register():
         return jsonify({'message': 'User created successfully'}), 201
 
     except Exception as e:
-        return jsonify({'message': str(e), 'field': e.field}), 400
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/profile/<userId>', methods=['GET'])
@@ -71,21 +73,23 @@ def getProfile():
 @login_required
 def getPost():
     try:
-        posts = Post.query.order_by(Post.created.desc()).all()
+        posts = Post.query.filter_by(deletedAt=None).order_by(Post.created.desc()).all()
         return jsonify([{
             'id': post.id,
             'title': post.title,
             'content': post.content,
             'created': post.created,
+            'image': post.image,
             'owner': post.owner,
             'ownerName': User.query.filter_by(id=post.owner).first().username,
             'likes': post.getLikes(),
             'dislikes': post.getDislikes(),
             'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
-            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count()
+            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
+            'currentUserIsOwner': post.owner == current_user.id
             } for post in posts]), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/posts/user/<userId>', methods=['GET'])
@@ -98,15 +102,17 @@ def getUserPosts(userId):
             'title': post.title,
             'content': post.content,
             'created': post.created,
+            'image': post.image,
             'owner': post.owner,
             'ownerName': User.query.filter_by(id=post.owner).first().username,
             'likes': post.getLikes(),
             'dislikes': post.getDislikes(),
             'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
-            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count()
+            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
+            'currentUserIsOwner': post.owner == current_user.id
             } for post in posts]), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/post/<postId>', methods=['GET'])
@@ -115,19 +121,24 @@ def getPostById(postId):
     try:
         post = Post.query.filter_by(id=postId).first()
         if not post:
-            return jsonify({'error': 'Post not found'}), 404
+            raise PostNotFoundException()
         return jsonify({
             'id': post.id,
-            'title': post.title,
-            'content': post.content,
+            'title': '' if post.deletedAt else post.title,
+            'content': 'Deleted post' if post.deletedAt else post.content,
             'created': post.created,
+            'deleted': True if post.deletedAt else False,
+            'image': post.image,
+            'owner': post.owner,
+            'ownerName': User.query.filter_by(id=post.owner).first().username,
             'likes': post.getLikes(),
             'dislikes': post.getDislikes(),
             'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
-            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count()
+            'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
+            'currentUserIsOwner': post.owner == current_user.id
             }), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/post', methods=['POST'])
@@ -154,7 +165,7 @@ def createPost():
         db.session.commit()
         return ({'message': 'Post created successfully'}), 201
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/post', methods=['DELETE'])
@@ -164,12 +175,15 @@ def deletePost():
         data = request.json
         post = Post.query.filter_by(id=data['id']).first()
         if not post:
-            return jsonify({'error': 'Post not found'}), 404
-        db.session.delete(post)
+            raise PostNotFoundException()
+        if post.owner != current_user.id:
+            raise PermissionDeniedException()
+
+        post.delete()
         db.session.commit()
         return jsonify({'message': 'Post deleted successfully'}), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/post', methods=['PUT'])
@@ -180,13 +194,24 @@ def updatePost():
         validate_post_form(data)
         post = Post.query.filter_by(id=data['id']).first()
         if not post:
-            return jsonify({'error': 'Post not found'}), 404
+            raise PostNotFoundException()
+        if post.owner != current_user.id:
+            raise PermissionDeniedException()
         post.title = data['title']
         post.content = data['content']
+        if 'image' in data:
+            file = base64.b64decode(data['image'])
+            filename = f"{uuid.uuid4()}.png"
+            # Creates uploads folder if it doesn't exist
+            if not os.path.exists('uploads'):
+                os.makedirs('uploads')
+            with open(f"uploads/{filename}", 'wb') as f:
+                f.write(file)
+            post.image = filename
         db.session.commit()
         return jsonify({'message': 'Post updated successfully'}), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 @app.route('/api/post/react/<reactType>/<postId>', methods=['POST'])
@@ -197,21 +222,24 @@ def reactPost(reactType, postId):
             raise InvalidReactionException()
 
         post = Post.query.filter_by(id=postId).first()
-        if post:
-            reaction = Reaction.query.filter_by(post=postId, user=current_user.id).first()
-            if not reaction:
-                reaction = Reaction(post=postId, user=current_user.id)
+        if not post:
+            raise PostNotFoundException()
 
-            if reaction.type != reactType:
-                reaction.setType(reactType)
-                db.session.add(reaction)
-            else:
-                db.session.delete(reaction)
-            db.session.commit()
+        reaction = Reaction.query.filter_by(post=postId, user=current_user.id).first()
+        if not reaction:
+            reaction = Reaction(post=postId, user=current_user.id)
+
+        if reaction.type != reactType:
+            reaction.setType(reactType)
+            db.session.add(reaction)
+        else:
+            db.session.delete(reaction)
+
+        db.session.commit()
 
         return jsonify({'message': 'Reaction added/updated successfully'}), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 @app.route('/api/post/comment', methods=['POST'])
 @login_required
@@ -225,7 +253,7 @@ def getPostImage(postId):
     try:
         post = Post.query.filter_by(id=postId).first()
         if not post:
-            return jsonify({'error': 'Post not found'}), 404
+            raise PostNotFoundException()
         if not post.image:
             return jsonify({'error': 'Post has no image'}), 404
         with open(f"uploads/{post.image}", 'rb') as f:
@@ -234,4 +262,4 @@ def getPostImage(postId):
         response.headers.set('Content-Type', 'image/png')
         return response, 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'message': str(e), 'field': e.field}), e.code

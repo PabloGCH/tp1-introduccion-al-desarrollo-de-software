@@ -31,7 +31,7 @@ const responseHandler = (response) => {
     if (response.ok) {
         response.json().then(registerHandler);
     } else {
-        response.json().then(registerErrorHandler);
+        response.json().then(ErrorHandler);
     }
 }
 
@@ -39,23 +39,3 @@ const registerHandler = (data) => {
     sessionStorage.setItem(window.sessionStorageKeys['userCreated'], 1);
     window.location.href = '/pages/login';
 };
-
-const registerErrorHandler = (error) => {
-    if(error.message){
-        errorToast(window.backendErrors[error.message]);
-    }
-    if(error.field){
-        error.field.forEach(field => {
-            let input = document.getElementById(field);
-            input.classList.add('is-invalid');
-            let inputValidate = document.getElementById(field+"-verify");
-            if(inputValidate){
-                inputValidate.classList.add('is-invalid');
-            }
-        });
-    }
-};
-
-const unknownErrorHandler = (error) => {
-    errorToast('Error desconocido');
-}

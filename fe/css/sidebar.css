@@ -63,6 +63,6 @@
   .sidebar {
     position: sticky;
     top: var(--header-height);
-    height: 500px;
+    height: 0;
   }
 }

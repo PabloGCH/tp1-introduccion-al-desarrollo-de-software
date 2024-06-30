@@ -7,7 +7,11 @@ const sidebarLinks = [{
   text: 'Posts',
   url: '/',
   icon: 'fa-solid fa-newspaper'
-}, {
+},{
+  text: 'New Post',
+  url: '/pages/new-post',
+  icon: 'fa-solid fa-plus'
+},{
   text: 'Profile',
   url: '/pages/profile/' + currentUser.username,
   icon: 'fa-solid fa-user'

@@ -31,12 +31,16 @@ class Post(db.Model):
     image = db.Column(db.Text, nullable=True)
     created = db.Column(db.DateTime, default=db.func.current_timestamp())
     owner = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    deletedAt = db.Column(db.DateTime, nullable=True)
 
     def getLikes(self):
         return Reaction.query.filter_by(post=self.id, type='like').count()
 
     def getDislikes(self):
         return Reaction.query.filter_by(post=self.id, type='dislike').count()
+
+    def delete(self):
+        self.deletedAt = db.func.current_timestamp()
 
     def __repr__(self):
         return f"<Post {self.title}>"
