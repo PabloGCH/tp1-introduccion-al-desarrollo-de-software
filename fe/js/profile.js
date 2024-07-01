@@ -20,6 +20,12 @@ let createPostTypesButtons = () => {
         },
     ];
 
+    let urlParams = new URLSearchParams(window.location.search);
+    let username = urlParams.get('username');
+
+    let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+
+
     let buttonsContainer = document.getElementById('post-types');
 
     buttonsArray.forEach((item) => {
@@ -30,8 +36,14 @@ let createPostTypesButtons = () => {
         let icon = document.createElement('i');
         icon.className = item.icon;
 
+        let prefix = ''
+
+        if (currentUser.username == username){
+            prefix = 'My '
+        }
+
         let text = document.createElement('span');
-        text.innerHTML = item.text;
+        text.innerHTML = prefix + item.text;
 
         button.appendChild(icon);
         button.appendChild(text);
@@ -47,6 +59,47 @@ let createPostTypesButtons = () => {
     });
 };
 
+let createProfileInfo = (user) => {
+    console.log(user);
+    let profileContainer = document.getElementById('profile-info');
+
+    let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+
+    if (currentUser.username != user.username){
+        let profileInfo = document.createElement('div');
+        profileInfo.classList.add('d-flex', 'flex-row', 'align-items-center', 'justify-content-center');
+
+        let nameAndUsernameContent = document.createElement('div');
+        nameAndUsernameContent.classList.add('d-flex', 'flex-column', 'align-items-center', 'text-nowrap');
+
+        let nameAndLastName = document.createElement('div');
+        nameAndLastName.classList.add('d-flex', 'flex-row', 'align-items-center', 'w-100');
+        nameAndLastName.innerText = user.name + ' ' + user.surname;
+
+        let username = document.createElement('div');
+        username.classList.add('d-flex', 'flex-row', 'align-items-center', 'w-100');
+        username.innerText = user.username;
+        username.setAttribute('id', 'profile-username');
+
+        nameAndUsernameContent.appendChild(nameAndLastName);
+        nameAndUsernameContent.appendChild(username);
+
+        let image = document.createElement('img');
+        image.classList.add('avatar', 'me-2', 'ms-2');
+
+        let imageUrl = '../img/placeholder-profile-picture.png';
+        if (user.image){
+            imageUrl = config.backend + config.endpoints.getImage.url + '/' + user.image;
+        }
+        image.src = imageUrl;
+
+        profileInfo.appendChild(nameAndUsernameContent);
+        profileInfo.appendChild(image);
+        profileContainer.appendChild(profileInfo);
+        profileContainer.classList.remove('d-none');
+    }
+};
+
 let updatePosts = (filter) => {
     let urlParams = new URLSearchParams(window.location.search);
     let username = urlParams.get('username');
@@ -57,4 +110,26 @@ let updatePosts = (filter) => {
     .catch(UnknownErrorHandler);
 };
 
+let getProfileInfo = () => {
+    let urlParams = new URLSearchParams(window.location.search);
+    let username = urlParams.get('username');
+
+    let requestConfig = {
+        method: config.endpoints.getProfile.method,
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    };
+
+    return fetch(config.backend + config.endpoints.getProfile.url + '/' + username, requestConfig)
+}
+
+let getProfileResponseHandler = (response) => {
+    if (response.ok) {
+        response.json().then(createProfileInfo);
+    } else {
+        response.json().then(ErrorHandler);
+    }
+}
+
 createPostTypesButtons();
+getProfileInfo().then(getProfileResponseHandler).catch(UnknownErrorHandler);

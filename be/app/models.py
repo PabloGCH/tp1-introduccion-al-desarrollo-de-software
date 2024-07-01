@@ -8,7 +8,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(40), unique=True, nullable=False)
     name = db.Column(db.String(40), nullable=False)
     surname = db.Column(db.String(40), nullable=False)
-    avatar = db.Column(db.Text, nullable=True)
+    image = db.Column(db.Text, nullable=True)
     password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     created = db.Column(db.DateTime, default=db.func.current_timestamp())

@@ -32,7 +32,7 @@ def login():
             raise LoginFailedException(['email-username', 'password'])
 
         login_user(user)
-        return jsonify({'user': {'username': user.username, 'name': user.name, 'surname': user.surname, 'avatar': user.avatar}}), 200
+        return jsonify({'user': {'username': user.username, 'name': user.name, 'surname': user.surname, 'image': user.image}}), 200
 
     except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
@@ -66,9 +66,14 @@ def register():
 
 
 @app.route('/api/profile/<username>', methods=['GET'])
-def getProfile():
-    return ''
-
+def getProfile(username):
+    try:
+        user = User.query.filter_by(username=username).first()
+        if not user:
+            raise Exception('User not found')
+        return jsonify({'username': user.username, 'name': user.name, 'surname': user.surname, 'image': user.image}), 200
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 @app.route('/api/posts', methods=['GET'])
 @login_required
@@ -246,7 +251,7 @@ def convertPostToResponse(post):
         'content': 'Deleted post' if post.deletedAt else post.content,
         'created': post.created,
         'deleted': True if post.deletedAt else False,
-        'image': post.image,
+        'image': True if post.image else False,
         'owner': post.owner,
         'ownerName': User.query.filter_by(id=post.owner).first().username,
         'likes': post.getLikes(),

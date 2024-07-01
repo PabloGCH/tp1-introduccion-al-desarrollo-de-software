@@ -13,7 +13,7 @@ const sidebarLinks = [{
   url: '/pages/new-post',
   icon: 'fa-solid fa-plus'
 },{
-  text: 'Profile',
+  text: 'My Profile',
   url: '/pages/profile?username=' + currentUser.username,
   icon: 'fa-solid fa-user'
 },{
