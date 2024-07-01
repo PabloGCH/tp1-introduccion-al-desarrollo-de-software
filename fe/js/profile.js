@@ -60,7 +60,6 @@ let createPostTypesButtons = () => {
 };
 
 let createProfileInfo = (user) => {
-    console.log(user);
     let profileContainer = document.getElementById('profile-info');
 
     let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));

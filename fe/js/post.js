@@ -199,7 +199,6 @@ let deletePost = (postId) => {
 
     fetch(config.backend + config.endpoints.deletePost.url, requestConfig)
         .then(response => {
-            console.log(response);
             if (response.ok) {
                 let postCard = document.getElementById('post-'+postId);
                 postCard.remove();
