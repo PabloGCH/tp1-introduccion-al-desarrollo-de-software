@@ -2,6 +2,7 @@ const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 const templateLinks = document.getElementById('sidebar-links');
 
 const currentUrl = window.location.pathname;
+const currentUrlWithParams = window.location.pathname + window.location.search;
 
 const sidebarLinks = [{
   text: 'Posts',
@@ -12,8 +13,8 @@ const sidebarLinks = [{
   url: '/pages/new-post',
   icon: 'fa-solid fa-plus'
 },{
-  text: 'Profile',
-  url: '/pages/profile/' + currentUser.username,
+  text: 'My Profile',
+  url: '/pages/profile?username=' + currentUser.username,
   icon: 'fa-solid fa-user'
 },{
   text: 'Exit',
@@ -45,7 +46,7 @@ sidebarLinks.forEach((link, i) => {
   if(link.id){
     a.id = link.id;
   }
-  if(currentUrl === link.url){
+  if(currentUrl === link.url || currentUrlWithParams === link.url){
     li.classList.add('active');
   }
   templateLinks.appendChild(li);

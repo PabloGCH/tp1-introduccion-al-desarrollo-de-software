@@ -51,3 +51,8 @@ class PostNotFoundException(CustomErrorException):
         self.message = 'PostNotFoundException'
         self.code = 404
         super().__init__(self.message)
+
+class InvalidFilterException(CustomErrorException):
+    def __init__(self):
+        self.message = 'InvalidFilterException'
+        super().__init__(self.message)

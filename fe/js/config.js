@@ -37,6 +37,10 @@ window.config = {
             "url": "api/logout",
             "method": "POST"
         },
+        "getProfile": {
+            "url": "api/profile",
+            "method": "GET"
+        },
         "reactToPost": {
             "url": "api/post/react",
             "method": "POST"

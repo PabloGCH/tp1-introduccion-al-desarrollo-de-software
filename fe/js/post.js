@@ -10,7 +10,7 @@ let createPostHeader = (data) => {
 
     let owner = document.createElement('a');
     owner.classList.add('owner-link');
-    owner.href = '/pages/profile/' + data.ownerName;
+    owner.href = '/pages/profile?username=' + data.ownerName;
     owner.innerText = '@' + data.ownerName;
 
     let creationDate = document.createElement('span');
@@ -209,8 +209,6 @@ let deletePost = (postId) => {
             }
         })
         .catch(UnknownErrorHandler);
-
-
 }
 
 let getPostWithID = (postId) => {
@@ -234,10 +232,28 @@ let getLastPosts = () => {
     return fetch(config.backend + config.endpoints.getPosts.url, requestConfig)
 }
 
+let getPostOfUsername = (username = '', filter = 'last-posts') => {
+    if(username){
+
+        let urlFilter = '/' + username;
+        if(filter){
+            urlFilter += '/' + filter;
+        }
+
+        let requestConfig = {
+            method: config.endpoints.getPosts.method,
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        };
+
+        return fetch(config.backend + config.endpoints.getPosts.url + urlFilter, requestConfig)
+    }
+}
+
 const responsePostsHandler = (response) => {
     if (response.ok) {
         response.json().then((data) => {
-                if (!data.length){
+                if (typeof data === 'object' && !Array.isArray(data)){
                     data = [data];
                 }
                 let posts = data || [];
@@ -257,6 +273,11 @@ if (currentLocation.includes('/pages/post')) {
     let postId = urlParams.get('postId');
 
     getPostWithID(postId).then(responsePostsHandler)
+    .catch(UnknownErrorHandler);
+} else if (currentLocation.includes('/pages/profile')) {
+    let urlParams = new URLSearchParams(window.location.search);
+    let username = urlParams.get('username');
+    getPostOfUsername(username).then(responsePostsHandler)
     .catch(UnknownErrorHandler);
 } else {
     getLastPosts().then(responsePostsHandler)
