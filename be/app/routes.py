@@ -251,7 +251,7 @@ def convertPostToResponse(post):
         'content': 'Deleted post' if post.deletedAt else post.content,
         'created': post.created,
         'deleted': True if post.deletedAt else False,
-        'image': True if post.image else False,
+        'image': True if post.image and not post.deletedAt else False,
         'owner': post.owner,
         'ownerName': User.query.filter_by(id=post.owner).first().username,
         'likes': post.getLikes(),
