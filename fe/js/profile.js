@@ -100,7 +100,7 @@ let createProfileInfo = (user) => {
           editButton.appendChild(editButtonIcon);
           editButton.innerHTML += 'Edit Profile';
           editButton.addEventListener('click', () => {
-              window.location.href = '/pages/profile-edit?username=' + user.username;
+              window.location.href = '/pages/edit-profile?username=' + user.username;
           });
           editButtonContainer.appendChild(editButton);
           profileContainer.appendChild(editButtonContainer);

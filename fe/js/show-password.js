@@ -1,18 +1,22 @@
-const passwordInput = document.querySelector("#password");
-const passwordInputVerify = document.querySelector("#password-verify");
-
-function showPassword(e, isVerify = false) {
-  e.preventDefault();
-
-  const buttonIcon = e.currentTarget.getElementsByTagName("i")[0];
-  buttonIcon.className = buttonIcon.className === "fa fa-eye" ? "fa fa-eye-slash" : "fa fa-eye";
-
-  if(isVerify)
-    passwordInputVerify.type = passwordInputVerify.type === "password" ? "text" : "password";
-  else
-    passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+function getPasswordButtonClickEvent(icon, input) {
+  return (e) => {
+    e.preventDefault();
+    icon.className = icon.className === "fa fa-eye" ? "fa fa-eye-slash" : "fa fa-eye";
+    input.type = input.type === "password" ? "text" : "password";
+  };
 }
 
-function showPasswordVerify(e) {
-  showPassword(e, true);
-}
+const inputContainers = document.querySelectorAll(".show-password");
+inputContainers .forEach((inputContainer) => {
+  const button = inputContainer.getElementsByTagName("button")[0];
+  const buttonIcon = inputContainer.getElementsByTagName("i")[0];
+  const input = inputContainer.getElementsByTagName("input")[0];
+  const event = getPasswordButtonClickEvent(buttonIcon, input);
+  button.addEventListener("click", event);
+});
+
+
+
+
+
+
