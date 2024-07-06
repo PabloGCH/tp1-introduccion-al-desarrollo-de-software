@@ -5,12 +5,19 @@
     border: 1px solid var(--border-color);
 }
 
+.profile-section {
+    min-width: 200px; 
+}
+
+.main-section-options {
+  max-width: 1000px;
+}
+
 .main-section-options li {
     list-style: none;
     display: flex;
     padding: 0;
     cursor: pointer;
-    font-size: 1.5em;
 }
 
 .active {
