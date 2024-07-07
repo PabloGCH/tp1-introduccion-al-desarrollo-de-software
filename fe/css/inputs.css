@@ -1,5 +1,5 @@
 .show-password button {
-  min-width: 50px;
+  min-width: 40px;
 }
 
 .input:has(input[required]) label::after {

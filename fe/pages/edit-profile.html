@@ -40,6 +40,7 @@
     <link defer rel="stylesheet" href="../css/layout.css" />
     <link defer rel="stylesheet" href="../css/post.css" />
     <link defer rel="stylesheet" href="../css/inputs.css" />
+    <link defer rel="stylesheet" href="../css/edit-profile.css" />
 
     <script src="../js/config.js"></script>
     <script src="../js/base.js"></script>
@@ -75,61 +76,81 @@
         <div class="main-section-title surface rounded border border-color p-2 mb-2">
           <h1>Edit profile</h1>
         </div>
-        <div class="surface shadow rounded border border-color p-2 mb-2">
-            <form id="edit-post-form">
+        <div class="surface shadow rounded border border-color p-2 mb-2 d-flex flex-column align-items-center">
+            <form id="edit-post-form" class="edit-form col-12 col-lg-8">
                 <div class="row gx-2">
-                    <div class="input col-12 col-md-6 d-flex flex-column align-items-center">
+                    <div class="input col-12 col-sm-6 d-flex flex-column align-items-center">
                         <label for="name" class="form-label d-block w-100">Name</label>
                         <div class="input-group shadow">
                             <input class="form-control" type="text" id="name" name="name" maxlength="120" required/>
                         </div>
                     </div>
-                </div>
-                <div class="row gx-2">
-                    <div class="input col-12 col-md-6 d-flex flex-column align-items-center">
-                        <label for="surname" class="form-label mt-1 d-block w-100">Surname</label>
+
+                    <div class="input col-12 col-sm-6 d-flex flex-column align-items-center">
+                        <label for="surname" class="form-label d-block w-100">Surname</label>
                         <div class="input-group shadow">
                             <input class="form-control" type="text" id="surname" name="surname" maxlength="10000" required></input>
                         </div>
                     </div>
                 </div>
                 <div class="row gx-2">
+                </div>
+                <div class="row gx-2">
                     <div class="input col-12 col-md-12 d-flex flex-column align-items-left">
                         <label for="image" class="form-label mt-1 d-block w-100">Avatar</label>
                         <div id="image-preview"></div>
                         <div class="input-group shadow">
-                            <input class="form-control" type="file" id="image" name="image" accept="image/*"/>
+                            <input class="form-control rounded" type="file" id="image" name="image" accept="image/*"/>
                             <input class="form-control d-none" type="text" id="image64" name="image64">
                         </div>
                     </div>
                 </div>
                 <div class="d-flex col-12 mt-2">
-                    <div class="row justify-content-left mt-2 w-100 m-0">
-                      <button type="submit" id="save-button" class="btn btn-success me-2 shadow col-12 col-sm-2 col-md-2">Save</button>
-                      <button type="button" id="cancel-button" class="btn btn-danger shadow col-12 col-sm-2 col-md-2">Cancel</button>
-                    </div>
+                  <div class="row justify-content-left mt-2 w-100 m-0">
+                    <button type="submit" id="save-button" class="btn btn-success me-2 shadow col-12 col-sm-2 col-md-2 mb-2 mb-sm-0">Save</button>
+                    <button type="button" id="cancel-button" class="btn btn-danger shadow col-12 col-sm-2 col-md-2">Cancel</button>
                   </div>
+                </div>
             </form>
-            <div class="separator"></div>
-            <form>
+            <div class="separator">
+            </div>
+            <hr class="w-100">
+            <form class="edit-form col-12 col-lg-8">
               <div class="row gx-2">
-                <div class="col-12 col-md-6 d-flex flex-column align-items-center">
-                  <label for="password" class="form-label mt-1 d-block w-100">Password</label>
+                <div class="col-12 col-sm-6 d-flex flex-column align-items-center">
+                  <label for="oldPassword" class="form-label mt-1 d-block w-100">Old password</label>
                   <div class="input-group show-password">
-                    <input class="form-control" type="password" id="password" name="password"/>
-                    <button type="button" class="input-group-text" id="password-toggle">
+                    <input class="form-control" type="password" id="oldPassword" name="oldPassword"/>
+                    <button type="button" class="input-group-text">
                       <i class="fa fa-eye"></i>
                     </button>
                   </div>
                 </div>
-                <div class="col-12 col-md-6 d-flex flex-column align-items-center">
-                  <label for="password-verify" class="form-label mt-1 d-block w-100">Verify password</label>
+              </div>
+              <div class="row gx-2">
+                <div class="col-12 col-sm-6 d-flex flex-column align-items-center">
+                  <label for="newPassword" class="form-label mt-1 d-block w-100">New password</label>
                   <div class="input-group show-password">
-                    <input class="form-control" type="password" id="password-verify" name="password-verify"/>
-                    <button type="button" class="input-group-text" id="password-verify-toggle">
+                    <input class="form-control" type="password" name="newPassword"/>
+                    <button type="button" class="input-group-text">
                       <i class="fa fa-eye"></i>
                     </button>
                   </div>
+                </div>
+                <div class="col-12 col-sm-6 d-flex flex-column align-items-center">
+                  <label for="passwordVerify" class="form-label mt-1 d-block w-100">Verify new password</label>
+                  <div class="input-group show-password">
+                    <input class="form-control" type="password" name="passwordVerify"/>
+                    <button type="button" class="input-group-text">
+                      <i class="fa fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex col-12 mt-2">
+                <div class="row justify-content-left mt-2 w-100 m-0">
+                  <button type="submit" id="save-button" class="btn btn-success me-2 shadow col-12 col-sm-2 col-md-2 mb-2 mb-sm-0">Save</button>
+                  <button type="button" id="cancel-button" class="btn btn-danger shadow col-12 col-sm-2 col-md-2">Cancel</button>
                 </div>
               </div>
             </form>
