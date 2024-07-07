@@ -70,7 +70,7 @@ let editResponseHandler = (response) => {
 }
 
 let editHandler = (data) => {
-    window.location.href = '/';
+    window.location.href = '/pages/post?postId=' + data.id;
 }
 
 let GetPostResponseHandler = (response) => {

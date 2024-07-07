@@ -62,5 +62,5 @@ let responseHandler = (response) => {
 }
 
 let createHandler = (data) => {
-    window.location.href = '/';
+    window.location.href = '/pages/post?postId=' + data.id;
 }

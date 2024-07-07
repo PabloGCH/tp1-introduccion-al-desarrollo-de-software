@@ -204,7 +204,7 @@ def createPost():
             new_post.image = filename
         db.session.add(new_post)
         db.session.commit()
-        return ({'message': 'Post created successfully'}), 201
+        return ({'message': 'Post created successfully', 'id': new_post.id}), 201
     except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 
@@ -263,7 +263,7 @@ def updatePost():
                 f.write(file)
             post.image = filename
         db.session.commit()
-        return jsonify({'message': 'Post updated successfully'}), 200
+        return jsonify({'message': 'Post updated successfully', 'id': post.id}), 200
     except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
 

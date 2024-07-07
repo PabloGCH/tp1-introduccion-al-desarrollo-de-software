@@ -214,6 +214,9 @@ let deletePost = (postId) => {
                 let postCard = document.getElementById('post-'+postId);
                 postCard.remove();
                 successToast('Post eliminado');
+                if(isPostDetail){
+                    window.location.href = '/';
+                }
             } else {
                 response.json().then(ErrorHandler);
             }
