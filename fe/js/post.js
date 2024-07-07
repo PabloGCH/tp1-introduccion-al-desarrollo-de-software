@@ -124,7 +124,7 @@ let createPostButtons = (data) => {
         deleteButton.appendChild(deleteIcon);
         deleteButton.addEventListener('click', (e) => {
             e.preventDefault()
-            confirmWarning('Delete post', 'Are you sure you want to delete this post?').then((value) => {
+            confirmWarning('', 'Are you sure you want to delete this post?').then((value) => {
               if(value.isConfirmed){
                 deletePost(data.id);
               }
