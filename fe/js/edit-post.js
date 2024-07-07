@@ -35,6 +35,17 @@ form.addEventListener('submit', (e) => {
         .catch(UnknownErrorHandler);
 });
 
+
+let loadBase64InPreview= (base64Img) => {
+    let container = document.getElementById('image-preview');
+    container.innerHTML = '';
+    let img= document.createElement('img');
+    img.src = 'data:image/png;base64,' + base64Img;
+    img.classList.add('rounded', 'border', 'border-color', 'post-img', 'post-edit-img', 'w-100');
+    img.addEventListener('error', imgLoadError);
+    container.appendChild(img);
+}
+
 let imageInput = document.getElementById('image');
 
 imageInput.addEventListener('change', (e) => {
@@ -45,8 +56,10 @@ imageInput.addEventListener('change', (e) => {
         let result = e.target.result;
         let image64 = result.split(',')[1]
         document.getElementById('image64').value = image64;
+        loadBase64InPreview(image64);
     }
 });
+
 
 let editResponseHandler = (response) => {
     if (response.ok) {
