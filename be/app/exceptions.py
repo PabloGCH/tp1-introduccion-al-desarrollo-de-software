@@ -52,6 +52,18 @@ class PostNotFoundException(CustomErrorException):
         self.code = 404
         super().__init__(self.message)
 
+class UserNotFoundException(CustomErrorException):
+    def __init__(self):
+        self.message = 'UserNotFoundException'
+        self.code = 404
+        super().__init__(self.message)
+
+class WrongPasswordException(CustomErrorException):
+    def __init__(self):
+        self.message = 'WrongPasswordException'
+        self.code = 401
+        super().__init__(self.message)
+
 class InvalidFilterException(CustomErrorException):
     def __init__(self):
         self.message = 'InvalidFilterException'

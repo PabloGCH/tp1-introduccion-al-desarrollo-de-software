@@ -9,11 +9,15 @@ from .exceptions import (
     InvalidReactionException,
     PermissionDeniedException,
     PostNotFoundException,
+    UserNotFoundException,
+    WrongPasswordException,
+    VerifyFieldException,
     InvalidFilterException)
 from .models import (User, Post, Reaction)
 from .forms_validators import (
         validate_login_form,
         validate_register_form,
+        validate_password_change_form,
         validate_post_form)
 from . import db
 from . import login_manager
@@ -74,6 +78,56 @@ def getProfile(username):
         return jsonify({'username': user.username, 'name': user.name, 'surname': user.surname, 'image': user.image}), 200
     except Exception as e:
         return jsonify({'message': str(e), 'field': e.field}), e.code
+
+
+@app.route('/api/profile', methods=['PUT'])
+@login_required
+def updateProfile():
+    try:
+        body = request.json
+
+        current_user.name = body['name']
+        current_user.surname = body['surname']
+
+        if 'image' in body:
+            file = base64.b64decode(body['image'])
+            filename = f"{uuid.uuid4()}.png"
+            # Creates uploads folder if it doesn't exist
+            if not os.path.exists('uploads'):
+                os.makedirs('uploads')
+            with open(f"uploads/{filename}", 'wb') as f:
+                f.write(file)
+            current_user.image = filename
+
+        db.session.commit()
+        return jsonify({'message': 'Profile updated successfully'}), 200
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
+
+
+@app.route('/api/change-password', methods=['PUT'])
+@login_required
+def changePassword():
+    try:
+        body = request.json
+        user = current_user
+
+        if not user:
+            raise UserNotFoundException()
+
+        validate_password_change_form(body)
+
+        if not user.check_password(body['oldPassword']):
+            raise WrongPasswordException()
+
+
+        user.set_password(body['newPassword'])
+
+        db.session.commit()
+        return jsonify({'message': 'Password changed successfully'}), 200
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
+
 
 @app.route('/api/posts', methods=['GET'])
 @login_required

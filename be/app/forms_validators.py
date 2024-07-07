@@ -18,14 +18,25 @@ required = {
     "post": [
         'title',
         'content'
+    ],
+    "passwordChange": [
+        'oldPassword',
+        'newPassword',
+        'newPasswordVerify'
+    ],
+    "profileUpdate": [
+        'name',
+        'surname'
     ]
 }
+
 
 def validate_login_form(data):
     missing_fields = get_missing_fields(data, 'login')
 
     if missing_fields:
         raise MissingFieldException(missing_fields)
+
 
 def validate_register_form(data):
 
@@ -52,6 +63,7 @@ def validate_register_form(data):
     if data['password'] != data['passwordVerify']:
         raise VerifyFieldException('password')
 
+
 def get_missing_fields(data, form):
     missing_fields = []
     for item in required[form]:
@@ -67,5 +79,15 @@ def validate_post_form(data):
         raise MissingFieldException(missing_fields)
 
 
+def validate_password_change_form(data):
+    missing_fields = get_missing_fields(data, 'passwordChange')
+    if missing_fields:
+        raise MissingFieldException(missing_fields)
+    if data['newPassword'] != data['newPasswordVerify']:
+        raise VerifyFieldException('newPassword')
 
 
+def validate_profile_update_form(data):
+    missing_fields = get_missing_fields(data, 'profileUpdate')
+    if missing_fields:
+        raise MissingFieldException(missing_fields)
