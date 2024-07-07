@@ -94,6 +94,12 @@ def updateProfile():
         if 'image' in body:
             file = base64.b64decode(body['image'])
             filename = f"{uuid.uuid4()}.png"
+            # Deletes previous image if it exists
+            if current_user.image:
+                try:
+                    os.remove(f"uploads/{current_user.image}")
+                except Exception:
+                    pass
             # Creates uploads folder if it doesn't exist
             if not os.path.exists('uploads'):
                 os.makedirs('uploads')
@@ -214,6 +220,13 @@ def deletePost():
         if post.owner != current_user.id:
             raise PermissionDeniedException()
 
+        # Deletes image if it exists
+        if post.image:
+            try:
+                os.remove(f"uploads/{post.image}")
+            except Exception:
+                pass
+
         post.delete()
         db.session.commit()
         return jsonify({'message': 'Post deleted successfully'}), 200
@@ -240,6 +253,12 @@ def updatePost():
             # Creates uploads folder if it doesn't exist
             if not os.path.exists('uploads'):
                 os.makedirs('uploads')
+            # Deletes previous image if it exists
+            if post.image:
+                try:
+                    os.remove(f"uploads/{post.image}")
+                except Exception:
+                    pass
             with open(f"uploads/{filename}", 'wb') as f:
                 f.write(file)
             post.image = filename
