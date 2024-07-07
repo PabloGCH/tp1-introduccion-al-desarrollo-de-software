@@ -1,0 +1,22 @@
+.login-register-logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  width: auto;
+}
+
+.login-register-logo img {
+  height: 100%;
+  width: auto;
+}
+
+
+.login-register-logo p {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  color: var(--text-color);
+  text-align: center;
+}
