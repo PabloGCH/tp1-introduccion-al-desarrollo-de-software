@@ -1,8 +1,11 @@
 .post {
-  cursor: pointer;
   color: #EEEEEE;
   display: block;
   text-decoration: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .owner-link {
@@ -54,6 +57,10 @@
 @media (min-width: 768px) {
   .post-img {
     max-width: 250px;
+  }
+  .post-img-detail {
+    max-width: 100%;
+    width: 100%;
   }
 }
 

@@ -1,3 +1,5 @@
+let isPostDetail = window.location.href.includes('/pages/post?postId=');
+
 let createPostHeader = (data) => {
     let container = document.createElement('div');
     container.classList.add('post-header', 'd-flex', 'flex-column', 'flex-md-row', 'justify-content-between', 'mb-2', 'border-bottom', 'border-color', 'py-1');
@@ -27,12 +29,18 @@ let createPostHeader = (data) => {
 
 let createPostContent = (data) => {
     let container = document.createElement('div');
-    container.classList.add('post-content', 'd-flex', 'flex-column', 'flex-md-row');
+    container.classList.add('post-content', 'd-flex', 'flex-column');
+    if(!isPostDetail){
+        container.classList.add('flex-md-row');
+    }
 
     if(data.image){
         let img= document.createElement('img');
         img.src = config.backend + config.endpoints.getPostImage.url + '/' + data.id;
         img.classList.add('rounded', 'border', 'border-color', 'post-img', 'me-md-2');
+        if(isPostDetail) {
+          img.classList.add('post-img-detail');
+        }
         img.addEventListener('error', imgLoadError);
         container.appendChild(img);
     }
@@ -135,10 +143,14 @@ let convertPostToHTMLObjects = (data) => {
     let postCard = document.createElement('div');
     postCard.classList.add('post', 'relative', 'surface', 'shadow', 'rounded', 'border', 'border-color', 'p-2', 'mb-2')
     postCard.id='post-'+data.id;
-
-    let redirect = document.createElement('a');
-    redirect.classList.add('absolute','inset-0')
-    redirect.href = '/pages/post?postId=' + data.id;
+    
+    if(!isPostDetail){
+        postCard.classList.add('cursor-pointer');
+        let redirect = document.createElement('a');
+        redirect.classList.add('absolute','inset-0')
+        redirect.href = '/pages/post?postId=' + data.id;
+        postCard.appendChild(redirect);
+    }
 
     //SECCION DE TITULO
     let postHeader = createPostHeader(data);
@@ -150,7 +162,6 @@ let convertPostToHTMLObjects = (data) => {
     let postButtons = createPostButtons(data);
 
     //AGREGAR SECCIONES A LA CARD
-    postCard.appendChild(redirect);
     postCard.appendChild(postHeader);
     postCard.appendChild(postContent);
     postCard.appendChild(postButtons);
@@ -270,7 +281,6 @@ let currentLocation = window.location.href;
 if (currentLocation.includes('/pages/post')) {
     let urlParams = new URLSearchParams(window.location.search);
     let postId = urlParams.get('postId');
-
     getPostWithID(postId).then(responsePostsHandler)
     .catch(UnknownErrorHandler);
 } else if (currentLocation.includes('/pages/profile')) {
