@@ -6,32 +6,42 @@ const editProfile = () => {
   const nameInput = document.getElementById("name");
   const surnameInput = document.getElementById("surname");
   const imageInput = document.getElementById("image");
+  const oldPasswordInput = document.getElementById("oldPassword");
+  const newPasswordInput = document.getElementById("newPassword");
+  const newPasswordVerifyInput = document.getElementById("newPasswordVerify");
   const editProfileForm = document.getElementById("edit-profile-form");
   const changePasswordForm = document.getElementById("change-password-form");
   let loading = false;
 
   //FUNCTIONS
   //=============================================================================
+  
+  const reloadImg = (base64img) => {
+      let container = document.getElementById("image-preview");
+      container.innerHTML = "";
+      let img = document.createElement("img");
+      if (base64img) {
+        img.src = "data:image/png;base64," + base64img;
+      } else {
+        img.src = config.backend + config.endpoints.getUserImage.url + '/' + currentUser.username + "?" + new Date().getTime();
+      }
+      img.onerror = () => {
+        console.log("error loading image");
+        img.src = "../img/placeholder-profile-picture.png";
+      };
+      img.classList.add(
+        "border",
+        "border-color",
+        "avatar"
+      );
+      container.appendChild(img);
+  };
 
   const refresh = (data) => {
     nameInput.value = data.name;
     surnameInput.value = data.surname;
-    imageInput.value = data.image;
-    if (data.image) {
-      let container = document.getElementById("image-preview");
-      let img = document.createElement("img");
-      img.src =
-        config.backend + config.endpoints.getPostImage.url + "/" + data.id;
-      img.classList.add(
-        "rounded",
-        "border",
-        "border-color",
-        "post-img",
-        "me-md-2",
-      );
-      img.addEventListener("error", imgLoadError);
-      container.appendChild(img);
-    }
+    imageInput.value = "";
+    reloadImg();
   };
 
   const editResponseHandler = (data) => {
@@ -40,7 +50,10 @@ const editProfile = () => {
       if (response.ok) {
         currentUser.name = data.name;
         currentUser.surname = data.surname;
+        currentUser.image = data.image || null;
+
         sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
+        refresh(currentUser);
         successToast("Profile updated successfully.");
       } else {
         response.json().then(ErrorHandler);
@@ -51,6 +64,9 @@ const editProfile = () => {
   const changePasswordResponseHandler = (response) => {
     loading = false;
     if (response.ok) {
+      oldPasswordInput.value = "";
+      newPasswordInput.value = "";
+      newPasswordVerifyInput.value = "";
       successToast("Password changed successfully.");
     } else {
       response.json().then(ErrorHandler);
@@ -68,7 +84,7 @@ const editProfile = () => {
       surname: e.target["surname"].value,
     };
     if (e.target["image"].value) {
-      //body.image = e.target["image"].value;
+      body.image = e.target["image64"].value;
     }
     let requestConfig = {
       method: config.endpoints.editProfile.method,
@@ -76,7 +92,6 @@ const editProfile = () => {
       headers: { "Content-Type": "application/json" },
       credentials: "include",
     };
-    console.log(requestConfig);
     fetch(config.backend + config.endpoints.editProfile.url, requestConfig)
       .then(editResponseHandler(body))
       .catch((e) => {
@@ -113,6 +128,18 @@ const editProfile = () => {
   //INIT
   editProfileForm.addEventListener("submit", editProfile);
   changePasswordForm.addEventListener("submit", changePassword);
+  imageInput.addEventListener("change", (e) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+
+    reader.onload = (e) => {
+      let result = e.target.result;
+      let image64 = result.split(",")[1];
+      document.getElementById("image64").value = image64;
+      reloadImg(image64);
+    };
+  });
+
   refresh(currentUser);
 };
 

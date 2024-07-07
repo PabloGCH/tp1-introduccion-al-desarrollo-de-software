@@ -81,7 +81,7 @@ let createProfileInfo = (user) => {
 
         let imageUrl = '../img/placeholder-profile-picture.png';
         if (user.image){
-            imageUrl = config.backend + config.endpoints.getImage.url + '/' + user.image;
+            imageUrl = config.backend + config.endpoints.getUserImage.url + '/' + user.username;
         }
         image.src = imageUrl;
 

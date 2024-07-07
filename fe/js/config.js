@@ -25,6 +25,10 @@ window.config = {
           "url": "api/img/post",
           "method": "GET"
         },
+        "getUserImage": {
+          "url": "api/img/user",
+          "method": "GET"
+        },
         "login": {
             "url": "api/login",
             "method": "POST"

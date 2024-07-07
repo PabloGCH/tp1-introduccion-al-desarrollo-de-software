@@ -283,6 +283,24 @@ def createComment():
 
 
 # Retorna la imagen como archivo binario para poder ser utilizada en un tag img
+@app.route('/api/img/user/<username>', methods=['GET'])
+def getUserImage(username):
+    try:
+        user = User.query.filter_by(username=username).first()
+        if not user:
+            raise UserNotFoundException()
+        if not user.image:
+            return jsonify({'error': 'User has no image'}), 404
+        with open(f"uploads/{user.image}", 'rb') as f:
+            image = f.read()
+        response = make_response(image)
+        response.headers.set('Content-Type', 'image/png')
+        return response, 200
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
+
+
+# Retorna la imagen como archivo binario para poder ser utilizada en un tag img
 @app.route('/api/img/post/<postId>', methods=['GET'])
 def getPostImage(postId):
     try:
