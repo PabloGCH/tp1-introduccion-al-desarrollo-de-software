@@ -65,11 +65,11 @@ let createProfileInfo = (user) => {
         nameAndUsernameContent.classList.add('d-flex', 'flex-column', 'align-items-center', 'text-nowrap','w-100');
 
         let nameAndLastName = document.createElement('div');
-        nameAndLastName.classList.add('w-100', 'text-center');
+        nameAndLastName.classList.add('w-100', 'text-center', 'fullname');
         nameAndLastName.innerText = user.name + ' ' + user.surname;
 
         let username = document.createElement('div');
-        username.classList.add('w-100', 'text-center');
+        username.classList.add('w-100', 'text-center', 'username');
         username.innerText = user.username;
         username.setAttribute('id', 'profile-username');
 

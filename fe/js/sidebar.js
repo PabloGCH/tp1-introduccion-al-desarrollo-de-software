@@ -32,6 +32,18 @@ const sidebar = () => {
       icon: "fa-solid fa-right-from-bracket",
     },
   ];
+  
+  let profileContainer = document.getElementById('sidebar-profile-info');
+  let nameAndLastName = document.createElement('div');
+  nameAndLastName.classList.add('w-100', 'text-center', 'fullname');
+  nameAndLastName.innerText = currentUser.name + ' ' + currentUser.surname;
+  let username = document.createElement('div');
+  username.classList.add('w-100', 'text-center', 'username');
+  username.innerText = currentUser.username;
+  username.setAttribute('id', 'profile-username');
+  profileContainer.appendChild(nameAndLastName);
+  profileContainer.appendChild(username);
+
 
   sidebarLinks.forEach((link, i) => {
     let li = document.createElement("li");
@@ -65,6 +77,7 @@ const sidebar = () => {
     }
     templateLinks.appendChild(li);
   });
+
   headerAvatar.src = config.backend + config.endpoints.getUserImage.url + '/' + currentUser.username;
   headerAvatar.onerror = () => {
     headerAvatar.src = "../img/placeholder-profile-picture.png";

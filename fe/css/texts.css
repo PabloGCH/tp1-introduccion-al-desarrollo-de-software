@@ -27,3 +27,13 @@ p {
 .small {
   font-size: 0.8em;
 }
+
+.username {
+  font-size: 0.9em;
+  color: rgba(var(--font-color-rgb), 0.5);
+}
+.fullname {
+  font-size: 1.1em;
+  color: var(--font-color);
+  font-weight: 600;
+}
