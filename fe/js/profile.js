@@ -79,11 +79,13 @@ let createProfileInfo = (user) => {
         let image = document.createElement('img');
         image.classList.add('avatar', 'me-2', 'ms-2');
 
-        let imageUrl = '../img/placeholder-profile-picture.png';
-        if (user.image){
-            imageUrl = config.backend + config.endpoints.getUserImage.url + '/' + user.username;
-        }
+
+        imageUrl = config.backend + config.endpoints.getUserImage.url + '/' + user.username;
         image.src = imageUrl;
+
+        image.onerror = () => {
+          image.src = '../img/placeholder-profile-picture.png';
+        };
 
         profileInfo.appendChild(image);
         profileInfo.appendChild(nameAndUsernameContent);

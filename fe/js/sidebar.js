@@ -1,6 +1,10 @@
+
+
 const sidebar = () => {
   const currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
   const templateLinks = document.getElementById("sidebar-links");
+  const headerAvatar = document.getElementById("header-avatar");
+  const sidebarAvatar = document.getElementById("sidebar-avatar");
 
   const currentUrl = window.location.pathname;
   const currentUrlWithParams =
@@ -61,5 +65,24 @@ const sidebar = () => {
     }
     templateLinks.appendChild(li);
   });
+  headerAvatar.src = config.backend + config.endpoints.getUserImage.url + '/' + currentUser.username;
+  headerAvatar.onerror = () => {
+    headerAvatar.src = "../img/placeholder-profile-picture.png";
+  };
+  sidebarAvatar.src = config.backend + config.endpoints.getUserImage.url + '/' + currentUser.username;
+  sidebarAvatar.onerror = () => {
+    sidebarAvatar.src = "../img/placeholder-profile-picture.png";
+  };
+
+  //EVENTO GLOBAL PARA REFRESCAR AVATARES
+  //=============================================================================
+  const refreshSidebarAndHeaderAvatar = () => {
+    console.log("refreshing avatars");
+    headerAvatar.src = config.backend + config.endpoints.getUserImage.url + '/' + currentUser.username + "?" + new Date().getTime();
+    sidebarAvatar.src = config.backend + config.endpoints.getUserImage.url + '/' + currentUser.username + "?" + new Date().getTime();
+  }
+  Object.assign(window, { refreshSidebarAndHeaderAvatar });
 };
 sidebar();
+
+

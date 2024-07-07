@@ -53,6 +53,8 @@ const editProfile = () => {
         currentUser.image = data.image || null;
 
         sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
+        window.refreshSidebarAndHeaderAvatar();
+
         refresh(currentUser);
         successToast("Profile updated successfully.");
       } else {
