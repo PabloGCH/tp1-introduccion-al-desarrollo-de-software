@@ -13,12 +13,14 @@ from .exceptions import (
     WrongPasswordException,
     VerifyFieldException,
     InvalidFilterException)
-from .models import (User, Post, Reaction)
+from .models import (User, Post, Reaction, Comment)
 from .forms_validators import (
         validate_login_form,
         validate_register_form,
         validate_password_change_form,
         validate_profile_update_form,
+        validate_comment_form,
+        validate_update_comment_form,
         validate_post_form)
 from . import db
 from . import login_manager
@@ -298,7 +300,78 @@ def reactPost(reactType, postId):
 @app.route('/api/post/comment', methods=['POST'])
 @login_required
 def createComment():
+    try:
+        data = request.json
+        validate_comment_form(data)
+        post = Post.query.filter_by(id=data['postId']).first()
+
+        if not post:
+            raise PostNotFoundException()
+
+        comment = Comment(
+            content=data['content'],
+            post=data['postId'],
+            owner=current_user.id
+        )
+
+        db.session.add(comment)
+        db.session.commit()
+
+        return jsonify({'message': 'Comment created successfully'}), 201
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
     return ''
+
+
+@app.route('/api/post/comment', methods=['DELETE'])
+@login_required
+def deleteComment():
+    try:
+        data = request.json
+        comment = Comment.query.filter_by(id=data['id']).first()
+        if not comment:
+            raise Exception('Comment not found')
+        if comment.owner != current_user.id:
+            raise PermissionDeniedException()
+        comment.delete()
+        db.session.commit()
+        return jsonify({'message': 'Comment deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
+
+
+@app.route('/api/post/comment', methods=['PUT'])
+@login_required
+def updateComment():
+    try:
+        data = request.json
+        validate_update_comment_form(data)
+        comment = Comment.query.filter_by(id=data['id']).first()
+        if not comment:
+            raise Exception('Comment not found')
+        if comment.owner != current_user.id:
+            raise PermissionDeniedException()
+        comment.content = data['content']
+        db.session.commit()
+        return jsonify({'message': 'Comment updated successfully'}), 200
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
+
+@app.route('/api/post/comments/<postId>', methods=['GET'])
+@login_required
+def getComments(postId):
+    try:
+        comments = Comment.query.filter_by(post=postId, deletedAt=None).order_by(Comment.created.asc()).all()
+        return jsonify([{
+            'id': comment.id,
+            'content': comment.content,
+            'created': comment.created,
+            'owner': comment.owner,
+            'ownerName': User.query.filter_by(id=comment.owner).first().username,
+            'currentUserIsOwner': comment.owner == current_user.id
+        } for comment in comments]), 200
+    except Exception as e:
+        return jsonify({'message': str(e), 'field': e.field}), e.code
 
 
 # Retorna la imagen como archivo binario para poder ser utilizada en un tag img
