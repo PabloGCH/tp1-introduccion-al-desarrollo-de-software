@@ -221,6 +221,7 @@ let deletePost = (postId) => {
                 if(isPostDetail){
                     window.location.href = '/';
                 }
+                addNoPostsMessage();
             } else {
                 response.json().then(ErrorHandler);
             }
@@ -267,6 +268,23 @@ let getPostOfUsername = (username = '', filter = 'last-posts') => {
     }
 }
 
+const addNoPostsMessage = () => {
+  let container = document.getElementById('main-section-content');
+  if(container.childElementCount > 0){
+    return;
+  }
+  let noPosts = document.createElement('h3');
+  noPosts.classList.add('d-flex', 'align-items-center', 'justify-content-center', 'surface', 'rounded', 'p-2', 'shadow', 'border', 'border-color');
+  noPosts.innerText = 'No posts found';
+  let sadIcon = document.createElement('i');
+  sadIcon.classList.add('fa', 'fa-frown', 'me-2');
+  let magnifyingGlassIcon = document.createElement('i');
+  magnifyingGlassIcon.classList.add('fa', 'fa-search', 'me-2');
+  noPosts.prepend(sadIcon);
+  noPosts.prepend(magnifyingGlassIcon);
+  container.appendChild(noPosts);
+}
+
 const responsePostsHandler = (response) => {
     if (response.ok) {
         response.json().then((data) => {
@@ -277,19 +295,7 @@ const responsePostsHandler = (response) => {
                 posts.forEach(post => {
                     createPost(post);
                 });
-                if(posts.length === 0){
-                    let container = document.getElementById('main-section-content');
-                    let noPosts = document.createElement('h3');
-                    noPosts.classList.add('d-flex', 'align-items-center', 'justify-content-center', 'surface', 'rounded', 'p-2', 'shadow', 'border', 'border-color');
-                    noPosts.innerText = 'No posts found';
-                    let sadIcon = document.createElement('i');
-                    sadIcon.classList.add('fa', 'fa-frown', 'me-2');
-                    let magnifyingGlassIcon = document.createElement('i');
-                    magnifyingGlassIcon.classList.add('fa', 'fa-search', 'me-2');
-                    noPosts.prepend(sadIcon);
-                    noPosts.prepend(magnifyingGlassIcon);
-                    container.appendChild(noPosts);
-                }
+                addNoPostsMessage();
             });
         } else {
             response.json().then(ErrorHandler);
