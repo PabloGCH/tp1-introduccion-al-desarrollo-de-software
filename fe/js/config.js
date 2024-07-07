@@ -41,6 +41,14 @@ window.config = {
             "url": "api/profile",
             "method": "GET"
         },
+        "editProfile": {
+            "url": "api/profile",
+            "method": "PUT"
+        },
+        "changePassword": {
+            "url": "api/change-password",
+            "method": "PUT"
+        },
         "reactToPost": {
             "url": "api/post/react",
             "method": "POST"
@@ -54,10 +62,16 @@ window.sessionStorageKeys = {
 }
 
 window.backendErrors = {
-    "MissingFieldException":"Falta completar campos obligatorios.",
-    "VerifyFieldException":"Los campos no coinciden.",
-    "UsernameExistsException":"Usuario actualmente en uso.",
-    "EmailAlreadyUsedException":"Email actualmente en uso.",
-    "LoginFailedException":"Usuario o contraseña incorrectos.",
-    "PermissionDeniedException":"No tienes permisos para realizar esta acción.",
+    "MissingFieldException":"There are missing fields.",
+    "VerifyFieldException":"Fields do not match.",
+    "UsernameExistsException":"Username already in use.",
+    "EmailAlreadyUsedException":"Email already in use.",
+    "LoginFailedException":"Username, email or password incorrect.",
+    "PermissionDeniedException":"Permission denied.",
+    "InvalidFilterException":"Invalid filter.",
+    "WrongPasswordException":"Wrong password.",
 }
+
+
+
+

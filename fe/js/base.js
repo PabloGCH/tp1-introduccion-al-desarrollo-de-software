@@ -9,7 +9,7 @@ inputsArray.forEach(input => {
 });
 
 const UnknownErrorHandler = (error) => {
-    errorToast('Error desconocido');
+    errorToast('An unknown error occurred.');
 }
 
 const ErrorHandler = (error) => {

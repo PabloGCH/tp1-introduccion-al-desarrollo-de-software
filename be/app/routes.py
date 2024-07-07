@@ -18,6 +18,7 @@ from .forms_validators import (
         validate_login_form,
         validate_register_form,
         validate_password_change_form,
+        validate_profile_update_form,
         validate_post_form)
 from . import db
 from . import login_manager
@@ -85,6 +86,7 @@ def getProfile(username):
 def updateProfile():
     try:
         body = request.json
+        validate_profile_update_form(body)
 
         current_user.name = body['name']
         current_user.surname = body['surname']

@@ -77,7 +77,7 @@
           <h1>Edit profile</h1>
         </div>
         <div class="surface shadow rounded border border-color p-2 mb-2 d-flex flex-column align-items-center">
-            <form id="edit-post-form" class="edit-form col-12 col-lg-8">
+            <form id="edit-profile-form" class="edit-form col-12 col-lg-8">
                 <div class="row gx-2">
                     <div class="input col-12 col-sm-6 d-flex flex-column align-items-center">
                         <label for="name" class="form-label d-block w-100">Name</label>
@@ -114,12 +114,12 @@
             <div class="separator">
             </div>
             <hr class="w-100">
-            <form class="edit-form col-12 col-lg-8">
+            <form id="change-password-form" class="edit-form col-12 col-lg-8">
               <div class="row gx-2">
-                <div class="col-12 col-sm-6 d-flex flex-column align-items-center">
+                <div class="col-12 col-sm-6 d-flex flex-column align-items-center input">
                   <label for="oldPassword" class="form-label mt-1 d-block w-100">Old password</label>
                   <div class="input-group show-password">
-                    <input class="form-control" type="password" id="oldPassword" name="oldPassword"/>
+                    <input class="form-control" type="password" id="oldPassword" name="oldPassword" required/>
                     <button type="button" class="input-group-text">
                       <i class="fa fa-eye"></i>
                     </button>
@@ -127,19 +127,19 @@
                 </div>
               </div>
               <div class="row gx-2">
-                <div class="col-12 col-sm-6 d-flex flex-column align-items-center">
+                <div class="col-12 col-sm-6 d-flex flex-column align-items-center input">
                   <label for="newPassword" class="form-label mt-1 d-block w-100">New password</label>
                   <div class="input-group show-password">
-                    <input class="form-control" type="password" name="newPassword"/>
+                    <input class="form-control" type="password" name="newPassword" required/>
                     <button type="button" class="input-group-text">
                       <i class="fa fa-eye"></i>
                     </button>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 d-flex flex-column align-items-center">
+                <div class="col-12 col-sm-6 d-flex flex-column align-items-center input">
                   <label for="newPasswordVerify" class="form-label mt-1 d-block w-100">Verify new password</label>
                   <div class="input-group show-password">
-                    <input class="form-control" type="password" name="newPasswordVerify"/>
+                    <input class="form-control" type="password" name="newPasswordVerify" required/>
                     <button type="button" class="input-group-text">
                       <i class="fa fa-eye"></i>
                     </button>
