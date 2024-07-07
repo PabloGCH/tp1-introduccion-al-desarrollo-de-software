@@ -75,7 +75,7 @@ let loadPostDataHandler = (data) => {
         let container = document.getElementById('image-preview');
         let img= document.createElement('img');
         img.src = config.backend + config.endpoints.getPostImage.url + '/' + data.id;
-        img.classList.add('rounded', 'border', 'border-color', 'post-img', 'me-md-2');
+        img.classList.add('rounded', 'border', 'border-color', 'post-img', 'post-edit-img', 'w-100');
         img.addEventListener('error', imgLoadError);
         container.appendChild(img);
     }

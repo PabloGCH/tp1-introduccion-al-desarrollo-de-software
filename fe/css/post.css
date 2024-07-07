@@ -1,3 +1,8 @@
+#new-post-form, #edit-post-form {
+  width: 100%;
+  max-width: 500px;
+}
+
 .post {
   color: #EEEEEE;
   display: block;
@@ -21,6 +26,7 @@
   overflow: hidden;
   padding-top: 1px; /* Por alguna razon la imagen se sale del borde sin esto*/
 }
+
 
 .post-header h2 {
   overflow:hidden;
@@ -61,6 +67,11 @@
   .post-img-detail {
     max-width: 100%;
     width: 100%;
+  }
+  .post-edit-img {
+    width: 100%;
+    max-width: 100%;
+    max-height: 200px;
   }
 }
 
