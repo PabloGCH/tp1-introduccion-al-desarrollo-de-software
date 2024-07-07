@@ -270,6 +270,19 @@ const responsePostsHandler = (response) => {
                 posts.forEach(post => {
                     createPost(post);
                 });
+                if(posts.length === 0){
+                    let container = document.getElementById('main-section-content');
+                    let noPosts = document.createElement('h3');
+                    noPosts.classList.add('d-flex', 'align-items-center', 'justify-content-center', 'surface', 'rounded', 'p-2', 'shadow', 'border', 'border-color');
+                    noPosts.innerText = 'No posts found';
+                    let sadIcon = document.createElement('i');
+                    sadIcon.classList.add('fa', 'fa-frown', 'me-2');
+                    let magnifyingGlassIcon = document.createElement('i');
+                    magnifyingGlassIcon.classList.add('fa', 'fa-search', 'me-2');
+                    noPosts.prepend(sadIcon);
+                    noPosts.prepend(magnifyingGlassIcon);
+                    container.appendChild(noPosts);
+                }
             });
         } else {
             response.json().then(ErrorHandler);
