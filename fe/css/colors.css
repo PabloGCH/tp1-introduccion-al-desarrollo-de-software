@@ -59,4 +59,10 @@ body {
   color: var(--font-color) !important;
 }
 
+.swal2-popup {
+  background-color: var(--surface-color) !important;
+  color: var(--font-color) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--bs-box-shadow) !important;
+}
 
