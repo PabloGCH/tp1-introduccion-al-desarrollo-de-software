@@ -3,3 +3,10 @@
   width: 25px;
   border-radius: 50%;
 }
+
+
+@media (min-width: 576px) {
+  .comment-btn {
+    max-width: 120px;
+  }
+}
