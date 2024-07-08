@@ -49,7 +49,7 @@ let createPostContent = (data) => {
     content.classList.add('pt-2', 'w-100');
     content.innerHTML= data.content;
 
-    container.appendChild(content);
+    container.prepend(content);
 
     return container
 }
@@ -175,7 +175,7 @@ let convertPostToHTMLObjects = (data) => {
 let createPost = (data) => {
     let postCard = convertPostToHTMLObjects(data);
     let container = document.getElementById('main-section-content')
-    container.appendChild(postCard);
+    container.prepend(postCard);
 }
 
 let updatePostButtons = (data, postId) => {
