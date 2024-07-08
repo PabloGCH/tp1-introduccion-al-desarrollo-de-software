@@ -29,7 +29,7 @@ class EmailAlreadyUsedException(CustomErrorException):
         self.field = [field]
         super().__init__(self.message)
 
-class LoginFailedException(Exception):
+class LoginFailedException(CustomErrorException):
     def __init__(self, fields):
         self.message = 'LoginFailedException'
         self.field = fields
