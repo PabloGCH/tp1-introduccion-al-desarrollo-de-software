@@ -155,6 +155,8 @@ const comments = () => {
           commentForm.reset();
           commentSection.innerHTML = '';
           loadComments(true);
+          getPostWithID(postId).then(response => response.json())
+          .then(data => updatePostButtons(data, postId))
         });
     } else {
         response.json().then(ErrorHandler);

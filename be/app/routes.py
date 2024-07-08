@@ -423,6 +423,7 @@ def convertPostToResponse(post):
         'ownerName': User.query.filter_by(id=post.owner).first().username,
         'likes': post.getLikes(),
         'dislikes': post.getDislikes(),
+        'comments': Comment.query.filter_by(post=post.id, deletedAt=None).count(),
         'currentUserLikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='like').count(),
         'currentUserDislikes': Reaction.query.filter_by(post=post.id, user=current_user.id, type='dislike').count(),
         'currentUserIsOwner': post.owner == current_user.id

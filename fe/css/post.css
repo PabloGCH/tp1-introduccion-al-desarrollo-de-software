@@ -37,7 +37,7 @@
   z-index: 2;
 }
 
-.post .a {
+.post a {
   z-index: 1;
 }
 
@@ -74,5 +74,10 @@
     max-height: 200px;
   }
 }
+
+.post .post-comment-counter {
+  z-index: 0;
+}
+
 
 

@@ -98,13 +98,15 @@ let createPostButtons = (data) => {
     dislikeButton.appendChild(spanDislikes);
 
 
-    // let commentButton = document.createElement('button');
-    // commentButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded');
-    // let commentIcon = document.createElement('i');
-    // commentIcon.classList.add('fa', 'fa-comment', 'me-2');
-    // commentButton.appendChild(commentIcon);
-    // commentButton.appendChild(document.createTextNode(0));
-    // postCardButtons.appendChild(commentButton);
+    let commentButton = document.createElement('button');
+    commentButton.classList.add('btn', 'btn-empty', 'border', 'border-color', 'rounded', 'post-comment-counter');
+    let commentIcon = document.createElement('i');
+    commentIcon.classList.add('fa', 'fa-comment', 'me-2');
+    let spanComments = document.createElement('span');
+    spanComments.innerText = data.comments
+    commentButton.appendChild(commentIcon);
+    commentButton.appendChild(spanComments);
+
 
     let editButton = document.createElement('button');
     let deleteButton = document.createElement('button');
@@ -135,6 +137,7 @@ let createPostButtons = (data) => {
 
     content.appendChild(likeButton);
     content.appendChild(dislikeButton);
+    content.appendChild(commentButton);
     if(data.currentUserIsOwner){
         content.appendChild(editButton);
         content.appendChild(deleteButton);
