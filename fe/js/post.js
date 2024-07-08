@@ -178,7 +178,7 @@ let convertPostToHTMLObjects = (data) => {
 let createPost = (data) => {
     let postCard = convertPostToHTMLObjects(data);
     let container = document.getElementById('main-section-content')
-    container.prepend(postCard);
+    container.append(postCard);
 }
 
 let updatePostButtons = (data, postId) => {
