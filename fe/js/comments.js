@@ -1,5 +1,8 @@
 const comments = () => {
   const commentSection = document.getElementById('comment-section');
+  const commentForm = document.getElementById('new-comment-form');
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get('postId');
 
   const displayNoCommentsMessage = () => {
     if (commentSection.childElementCount > 0) {
@@ -84,25 +87,66 @@ const comments = () => {
     displayNoCommentsMessage();
   }
 
-  const responseCommentsHandler = (response) => {
+  const responseCommentsHandler = (scrollToBottom = false) => {
+    return (response) => {
+      if (response.ok) {
+          response.json().then((comments) => {
+            loadCommentsHandler(comments);
+            if (scrollToBottom) {
+              window.scrollTo(0, document.body.scrollHeight);
+            }
+          });
+      } else {
+          response.json().then(ErrorHandler);
+      }
+    }
+  }
+
+  const loadComments = (scrollToBottom = false) => {
+    commentSection.innerHTML = '';
+    let requestConfig = {
+        method: config.endpoints.comments.method,
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+    };
+
+    fetch(config.backend + config.endpoints.comments.url + '/' + postId, requestConfig)
+      .then(responseCommentsHandler(scrollToBottom))
+      .catch(UnknownErrorHandler);
+  }
+
+  const commentResponseHandler = (response) => {
     if (response.ok) {
-        response.json().then(loadCommentsHandler);
+        response.json().then(() => {
+          successToast('Comment created successfully');
+          commentForm.reset();
+          commentSection.innerHTML = '';
+          loadComments(true);
+        });
     } else {
         response.json().then(ErrorHandler);
     }
   }
 
-  const loadComments = (comments) => {
-    let requestConfig = {
-        method: config.endpoints.getPosts.method,
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include'
+  commentForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    let data = {
+        'content': e.target['content'].value,
+        'postId': postId 
     };
 
-    fetch(config.backend + config.endpoints.getPosts.url, requestConfig)
-      .then(responseCommentsHandler)
-      .catch(UnknownErrorHandler);
-  }
+    let requestConfig = {
+        "method": config.endpoints.comment.method,
+        "body": JSON.stringify(data),
+        "headers": { "Content-Type": "application/json" },
+        "credentials": 'include'
+    }
+
+    fetch(config.backend + config.endpoints.comment.url, requestConfig)
+        .then(commentResponseHandler)
+        .catch(UnknownErrorHandler);
+  });
   
   loadComments();
 }

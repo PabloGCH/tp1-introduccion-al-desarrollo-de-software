@@ -57,6 +57,14 @@ window.config = {
             "url": "api/post/react",
             "method": "POST"
         },
+        "comment": {
+            "url": "api/post/comment",
+            "method": "POST"
+        },
+        "comments": {
+            "url": "api/post/comments",
+            "method": "GET"
+        }
     }
 }
 
