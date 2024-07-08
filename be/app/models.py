@@ -57,3 +57,19 @@ class Reaction(db.Model):
 
     def __repr__(self):
         return f"<Reaction {self.type}>"
+
+class Comment(db.Model):
+    __tablename__ = 'comment'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    post = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    owner = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    deletedAt = db.Column(db.DateTime, nullable=True)
+
+    def delete(self):
+        self.deletedAt = db.func.current_timestamp()
+
+    def __repr__(self):
+        return f"<Comment {self.content}>"
+

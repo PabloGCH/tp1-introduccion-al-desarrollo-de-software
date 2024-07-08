@@ -19,6 +19,14 @@ required = {
         'title',
         'content'
     ],
+    "comment": [
+        "postId",
+        "content"
+    ],
+    "updateComment": [
+        "commentId",
+        "content"
+    ],
     "passwordChange": [
         'oldPassword',
         'newPassword',
@@ -89,5 +97,17 @@ def validate_password_change_form(data):
 
 def validate_profile_update_form(data):
     missing_fields = get_missing_fields(data, 'profileUpdate')
+    if missing_fields:
+        raise MissingFieldException(missing_fields)
+
+
+def validate_comment_form(data):
+    missing_fields = get_missing_fields(data, 'comment')
+    if missing_fields:
+        raise MissingFieldException(missing_fields)
+
+
+def validate_update_comment_form(data):
+    missing_fields = get_missing_fields(data, 'updateComment')
     if missing_fields:
         raise MissingFieldException(missing_fields)
