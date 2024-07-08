@@ -83,22 +83,27 @@ const comments = () => {
             return;
           }
 
-          let body = {
-            'id': comment.id
-          };
+          confirmWarning('', 'Are you sure you want to delete this comment?').then((result) => {
+            if (result.isConfirmed) {
+              let body = {
+                'id': comment.id
+              };
 
-          let requestConfig = {
-            method: config.endpoints.deleteComment.method,
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify(body)
-          };
-          
-          loading = true;
-          fetch(config.backend + config.endpoints.deleteComment.url, requestConfig)
-            .then(commentDeleteResponseHandler(comment.id))
-            .catch(UnknownErrorHandler);
+              let requestConfig = {
+                method: config.endpoints.deleteComment.method,
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(body)
+              };
+
+              loading = true;
+              fetch(config.backend + config.endpoints.deleteComment.url, requestConfig)
+                .then(commentDeleteResponseHandler(comment.id))
+                .catch(UnknownErrorHandler);
+            }
+          });
         });
+
       }
       
 
