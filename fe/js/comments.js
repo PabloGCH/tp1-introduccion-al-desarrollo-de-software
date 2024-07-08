@@ -172,6 +172,8 @@ const comments = () => {
             let comment = commentSection.querySelector('#comment-' + id);
             if (comment) {
               comment.remove();
+              getPostWithID(postId).then(response => response.json())
+              .then(data => updatePostButtons(data, postId))
             }
           });
       } else {
