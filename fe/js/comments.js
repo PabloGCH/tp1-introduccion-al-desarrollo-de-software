@@ -3,6 +3,7 @@ const comments = () => {
   const commentForm = document.getElementById('new-comment-form');
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get('postId');
+  let loading = false;
 
   const displayNoCommentsMessage = () => {
     if (commentSection.childElementCount > 0) {
@@ -24,6 +25,7 @@ const comments = () => {
   const loadCommentsHandler = (comments) => {
     comments.forEach(comment => {
       let commentContainer = document.createElement('div');
+      commentContainer.id = 'comment-' + comment.id;
       commentContainer.classList.add('d-flex', 'flex-column', 'align-items-start', 'p-2', 'rounded', 'shadow', 'border', 'border-color', 'mb-2', 'surface');
 
       let commentContent = document.createElement('p');
@@ -75,6 +77,28 @@ const comments = () => {
         deleteButtonIcon.classList.add('fa', 'fa-trash');
         deleteButton.appendChild(deleteButtonIcon);
         commentHeader.appendChild(deleteButton);
+
+        deleteButton.addEventListener('click', () => {
+          if (loading) {
+            return;
+          }
+
+          let body = {
+            'id': comment.id
+          };
+
+          let requestConfig = {
+            method: config.endpoints.deleteComment.method,
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(body)
+          };
+          
+          loading = true;
+          fetch(config.backend + config.endpoints.deleteComment.url, requestConfig)
+            .then(commentDeleteResponseHandler(comment.id))
+            .catch(UnknownErrorHandler);
+        });
       }
       
 
@@ -89,6 +113,7 @@ const comments = () => {
 
   const responseCommentsHandler = (scrollToBottom = false) => {
     return (response) => {
+      loading = false;
       if (response.ok) {
           response.json().then((comments) => {
             loadCommentsHandler(comments);
@@ -103,6 +128,7 @@ const comments = () => {
   }
 
   const loadComments = (scrollToBottom = false) => {
+
     commentSection.innerHTML = '';
     let requestConfig = {
         method: config.endpoints.comments.method,
@@ -110,12 +136,14 @@ const comments = () => {
         credentials: 'include'
     };
 
+    loading = true;
     fetch(config.backend + config.endpoints.comments.url + '/' + postId, requestConfig)
       .then(responseCommentsHandler(scrollToBottom))
       .catch(UnknownErrorHandler);
   }
 
   const commentResponseHandler = (response) => {
+    loading = false;
     if (response.ok) {
         response.json().then(() => {
           successToast('Comment created successfully');
@@ -128,8 +156,28 @@ const comments = () => {
     }
   }
 
+  const commentDeleteResponseHandler = (id) => {
+    return (response) => {
+      loading = false;
+      if (response.ok) {
+          response.json().then(() => {
+            successToast('Comment deleted successfully');
+            let comment = commentSection.querySelector('#comment-' + id);
+            if (comment) {
+              comment.remove();
+            }
+          });
+      } else {
+          response.json().then(ErrorHandler);
+      }
+    }
+  }
+
   commentForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (loading) {
+      return;
+    }
 
     let data = {
         'content': e.target['content'].value,
@@ -142,11 +190,13 @@ const comments = () => {
         "headers": { "Content-Type": "application/json" },
         "credentials": 'include'
     }
-
+    
+    this.loading = true;
     fetch(config.backend + config.endpoints.comment.url, requestConfig)
         .then(commentResponseHandler)
         .catch(UnknownErrorHandler);
   });
+
   
   loadComments();
 }

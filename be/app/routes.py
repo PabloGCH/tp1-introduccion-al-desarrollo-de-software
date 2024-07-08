@@ -12,6 +12,7 @@ from .exceptions import (
     UserNotFoundException,
     WrongPasswordException,
     VerifyFieldException,
+    CommentNotFoundException,
     InvalidFilterException)
 from .models import (User, Post, Reaction, Comment)
 from .forms_validators import (
@@ -330,7 +331,7 @@ def deleteComment():
         data = request.json
         comment = Comment.query.filter_by(id=data['id']).first()
         if not comment:
-            raise Exception('Comment not found')
+            raise CommentNotFoundException()
         if comment.owner != current_user.id:
             raise PermissionDeniedException()
         comment.delete()

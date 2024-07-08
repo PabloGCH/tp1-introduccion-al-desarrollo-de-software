@@ -64,7 +64,11 @@ window.config = {
         "comments": {
             "url": "api/post/comments",
             "method": "GET"
-        }
+        },
+        "deleteComment": {
+            "url": "api/post/comment",
+            "method": "DELETE"
+        },
     }
 }
 
